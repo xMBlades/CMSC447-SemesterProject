@@ -1,0 +1,60 @@
+.textWindow {
+  left: 30vw;
+  width: 40vw;
+  text-align: center;
+}
+.tableClass {
+/*   position: absolute; */
+	margin:auto;
+  margin-top: 2vh;
+}
+.popout{
+	position:relative;
+	margin: auto;
+/* 	left: 38vw; */
+	top: 20%;
+/* 	width: fit-content; */
+	min-width: 220px;
+	max-width: 50vw;
+	height: fit-content;
+	background-color: lightgrey;
+	border-radius: 3%;
+	z-index: 3;
+	text-align: center;
+}
+.buttonHolder{
+	margin: auto;
+	width: 100%;
+	margin-top: 1vh;
+/* 	margin-left: auto; */
+	
+}
+.fhack{
+	width: 0px;
+}
+
+.approveBtn {
+	box-shadow:inset 0px 0px 15px 3px #36507a;
+	background:linear-gradient(to bottom, #4269a6 5%, #415989 100%);
+	background-color:#4269a6;
+	border-radius:17px;
+	border:1px solid #1e2e45;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Verdana;
+	font-size:15px;
+	padding:6px 0px;
+	width: 80%;
+	margin-bottom: 2%;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #1539a3;
+}
+.approveBtn:hover {
+	background:linear-gradient(to bottom, #415989 5%, #4269a6 100%);
+	background-color:#415989;
+}
+.approveBtn:active {
+	position:relative;
+	top:1px;
+}

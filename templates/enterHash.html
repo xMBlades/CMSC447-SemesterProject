@@ -1,0 +1,40 @@
+{% extends 'movingBackground.html' %}
+{% block pageTitle%}Enter A Hash {% endblock %}
+
+{% block otherCSS %}
+
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='enterHash.css')}}">
+
+{% endblock %}
+
+{% block popout%} 
+<form>
+	<h1>Please Enter Your Hash Value:</h1>
+	<div>
+
+		<table class = "tableClass">
+			<tr>
+				<td>
+					<h2 class = "lbl" for = "hash">Hash Value:</h2></td><td><input id = "hash" name = "hash" type = "Text">
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class = "buttonHolder">
+		<span class = "fhack">
+			<input type="submit" class = "approveBtn" value = "Submit" formmethod = "post" formaction ="#">
+		</span>
+		<span class = "fhack">
+			<input type="submit" class = "disapproveBtn" value = "Cancel" formmethod = "post" formaction ="#">
+		</span>
+	</div>
+	
+</form>
+
+{% endblock %}
+
+{% block otherBodyContents%} 
+
+
+
+{% endblock %}
