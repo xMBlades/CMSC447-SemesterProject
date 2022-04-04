@@ -4,53 +4,65 @@
   text-align: center;
 }
 .approveBtn {
-  border-radius: 12px;
-
-	
+  border-radius: 0px;
+  border: 0;
   margin: auto;
-
+  padding: 0;
   background: #4444cc80;
+  width: 10vw;
+  max-width: 25%;
+  max-height:100%;
   text-align: center;
   line-height: 6vh;
   color: #fff;
-  width: 10vw;
-	max-width: 25%;
-  max-height: 100%;
   cursor: pointer;
+}
+.approveBtn:focus {
+  transition: none;
+  background: #4444cc80;
+  color: white;
+  width:10vw;
 }
 .approveBtn:hover {
   background: linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
   background-color: #378de5;
 }
-.approveBtn:active {
+.approveBtn:hover:active {
+  color: white;
+  background: linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
+  background-color: #378de5;
   position: relative;
   top: 2px;
+  width: 10vw;
 }
 .disapproveBtn {
-	
-	margin: auto;
-
-  border-radius: 12px;
-  
+  display: block;
+  border-radius: 0px;
+  font-size: 18px;
+  font-family: Arial;
+  margin: auto;
+  margin-top: 1vh;
   background: #cc444480;
+  width: 10vw;
+  max-width: 25%;
+  max-height: 100%;
   text-align: center;
   line-height: 6vh;
   color: #fff;
-  width: 10vw;
-  max-height: 100%;
+  text-decoration:none;
   cursor: pointer;
 }
 .disapproveBtn:hover {
   background: linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
   background-color: #378de5;
 }
-.disapproveBtn:active {
+.disapproveBtn:hover:active {
   position: relative;
   top: 2px;
 }
 .tableClass {
 
-	margin:auto;
+  margin:auto;
   margin-top: 2vh;
 }
 .popout{
@@ -67,13 +79,13 @@
 	z-index: 3;
 	text-align: center;
 }
-.buttonHolder{
+.buttonHolder {
 	margin: auto;
 	width: 100%;
 	margin-top: 1vh;
 
 	
 }
-.fhack{
+.fhack {
 	width: 0px;
 }
