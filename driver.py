@@ -5,6 +5,10 @@ import pymongo
 import requests
 import json
 import re
+import hashlib
+from flask_cors import CORS, cross_origin
+
+
 
 client = pymongo.MongoClient("mongodb+srv://admin:123@cluster0.xprpc.mongodb.net/hashdb?retryWrites=true&w=majority")
 db = client.Cluster0
@@ -19,6 +23,14 @@ headers = {
     "Accept": "application/json",
     "x-apikey": "c6c1781bab81e19b1488b212a615a64bd9cb6318376a592d41fe79c8b703c18a",
 }
+
+def hashFile():
+        f = request.files['file']
+        data = f.read()
+        sha256 = hashlib.sha256()
+        sha256.update(data)
+        f.close()
+        return (sha256.hexdigest())
 
 def insertNew(hash):
     print('inserting new hash ', hash)
@@ -117,9 +129,12 @@ def updateOne(hashmd5):
 def test():
     return "you found me!"
 
-@driver_api.route('/hashinfo/')
+@driver_api.route('/hashinfo/', methods = ["GET", "POST"])
 def getHash():
-    hash = request.args.get('hash')
+    if request.method == "GET":
+        hash = request.args.get('hash')
+    else:
+        hash = hashFile()
     today = date.today()
     if(md5re.match(hash)):
         print('recieved md5 hash...')
@@ -161,5 +176,58 @@ def getHash():
             
     return insertNew(hash)
 
+cors = CORS(driver_api)
+# driver_api.config['CORS_HEADERS'] = 'Content-Type'
+
+@driver_api.route('/rawHash/', methods = ["GET"])
+@cross_origin()
+def rawHash():
+
+    if request.method == "GET":
+        print('raw JSON requested')
+        hash = request.args.get('hash')
+    else:
+        hash = hashFile()
+    today = date.today()
+    if(md5re.match(hash)):
+        print('recieved md5 hash...')
+
+        if(len(list(db['hashes'].find({'md5':hash}))) > 0):
+            print('hash exists in database!')
+            hashinfo = db['hashes'].find_one({'md5':hash})
+            hashjson = json.dumps(hashinfo,default=json_util.default)
+            upload_date = date.fromisoformat(hashinfo['db_insertion_date'])
+            delta = today - upload_date
+            print(delta, " since last update...")
+            if delta.days > 30:
+                return updateOne(hashjson['md5'])
+            return hashjson
+            
+    elif(sha1re.match(hash)):
+        print('recieved sha1 hash...')
+        if(len(list(db['hashes'].find({'sha1':hash}))) > 0):
+            print('hash exists in database!')
+            hashinfo = db['hashes'].find_one({'sha1':hash})
+            hashjson = json.dumps(hashinfo,default=json_util.default)
+            upload_date = date.fromisoformat(hashinfo['db_insertion_date'])
+            print(delta, " since last update...")
+            if delta.days > 30:
+                return updateOne(hashjson['md5'])
+            return hashjson
+            
+    elif(sha256re.match(hash)):
+        print('recieved sha256 hash...')
+        if(len(list(db['hashes'].find({'sha256':hash}))) > 0):
+            print('hash exists in database!')
+            hashinfo = db['hashes'].find_one({'sha256':hash})
+            hashjson = json.dumps(hashinfo,default=json_util.default)
+            upload_date = date.fromisoformat(hashinfo['db_insertion_date'])
+            delta = today - upload_date
+            print(delta, " since last update...")
+            if delta.days > 30:
+                return updateOne(hashjson['md5'])
+            return hashjson
+            
+    return insertNew(hash)
 
 

@@ -1,26 +1,27 @@
 {% extends 'movingBackground.html' %}
-{% block pageTitle%}Enter A Hash {% endblock %}
+{% block pageTitle%}VirusPartial{% endblock %}
 
 {% block otherCSS %}
 
 	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='enterHash.css')}}">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 
 {% endblock %}
 
 {% block popout%} 
-<form>
+<form method="GET" enctype="application/x-www-form-urlencoded" action="{{hash_search}}/">
 	<h1>Please Enter Your Hash Value:</h1>
 	<div>
 		<table class = "tableClass">
 			<tr>
 				<td>
-					<h2 class = "lbl" for = "hash">Hash Value:</h2></td><td><input id = "hash" name = "hash" type = "Text">
+					<label class = "lbl" for = "hash">Hash Value:</h2></td><td><input id = "hash" name = "hash" type = "Text">
 				</td>
 			</tr>
 		</table>
 	</div>
 	<div class = "buttonHolder"><span class = "fhack">
-		<input type="submit" class = "approveBtn" value = "Submit" formaction ="{{hash_search}}/">
+		<input type="submit" class = "approveBtn" value = "Submit">
 		<a class = "disapproveBtn" draggable = false href = "{{return_home}}">
 			Cancel
 		</a>

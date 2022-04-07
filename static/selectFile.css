@@ -1,0 +1,95 @@
+.textWindow {
+    left: 30vw;
+    width: 40vw;
+    text-align: center;
+  }
+  .approveBtn {
+    display: inline-block;
+    transition: none;
+    border-radius: 0px;
+    border: 0;
+    margin: auto;
+    padding: 0;
+    background: #4444cc80;
+    width: 10vw;
+    max-width: 25%;
+    max-height:100%;
+    text-align: center;
+    line-height: 6vh;
+    color: #fff;
+    cursor: pointer;
+  }
+  .approveBtn:focus {
+    transition: none;
+    background: #4444cc80;
+    color: white;
+    width:10vw;
+  }
+  .approveBtn:hover {
+    transition: none;
+    background: linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
+    background-color: #378de5;
+  }
+  .approveBtn:hover:active {
+    transition: none;
+    color: white;
+    background: linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
+    background-color: #378de5;
+    position: relative;
+    top: 2px;
+    width: 10vw;
+  }
+  .disapproveBtn {
+    display: inline-block;
+    border-radius: 0px;
+    font-size: 18px;
+    font-family: Arial;
+    margin: auto;
+    margin-top: 1vh;
+    background: #cc444480;
+    width: 10vw;
+    max-width: 25%;
+    min-width: 100px;
+    max-height: 100%;
+    text-align: center;
+    line-height: 6vh;
+    color: #fff;
+    text-decoration:none;
+    cursor: pointer;
+  }
+  .disapproveBtn:hover {
+    background: linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
+    background-color: #378de5;
+  }
+  .disapproveBtn:hover:active {
+    position: relative;
+    top: 2px;
+  }
+  .popout{
+      position:relative;
+      margin: auto;
+      top: 20%;
+      min-width: 220px;
+      max-width: 50vw;
+      height: fit-content;
+      background-color: lightgrey;
+      border-radius: 3%;
+      z-index: 3;
+      text-align: center;
+  }
+  .buttonHolder {
+      margin: auto;
+      width: 100%;
+      margin-top: 1vh;
+  }
+  .fhack {
+      width: 0px;
+  }
+  .fileSelect {
+    width: 75%;
+    height: 100%;
+    margin: auto;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    text-align: center;
+  }

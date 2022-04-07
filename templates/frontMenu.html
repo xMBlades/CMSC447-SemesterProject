@@ -1,21 +1,22 @@
 {% extends 'movingBackground.html' %}
-{% block pageTitle%} Virus Partial {% endblock %}
+{% block pageTitle%}VirusPartial{% endblock %}
 {% block otherCSS %}
 
 	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='frontMenu.css')}}">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 
 {% endblock %}
 
 {% block popout%} 
 <h1>Please Select An Option:</h1>
 		<div class = "buttonHolder"><span class = "fhack">
-			<a class = "approveBtn" href = "{{button_link_A}}">
+			<a class = "approveBtn" draggable = false href = "{{button_link_A}}">
 				Select A File
 			</a>
-			<a class = "approveBtn" href = "{{button_link_B}}">
+			<a class = "approveBtn" draggable = false href = "{{button_link_B}}">
 				Enter A Hash
 			</a>
-			<a class = "approveBtn" href = "{{button_link_C}}">
+			<a class = "approveBtn" draggable = false href = "{{button_link_C}}">
 				More
 			</a>
 		</span></div>

@@ -157,6 +157,7 @@ form button:hover {
   -webkit-animation: square 25s infinite;
   animation: square 25s infinite;
   transition-timing-function: linear;
+  transition: all 0.1s;
 }
 
 [class*="extraBubble"] {
@@ -258,5 +259,48 @@ form button:hover {
   }
   100% {
     transform: translateY(-250vh) rotate(600deg);
+  }
+}
+
+.popped{
+  /*background-color: red !important;*/
+  -webkit-animation-name: pop !important;
+          animation-name: pop !important;
+  -webkit-animation-delay: 0.2s !important;
+          animation-delay: 0.2s !important;
+  -webkit-animation-duration: 2s !important;
+          animation-duration: 2s !important;
+  -webkit-animation-iteration-count:  1 !important;
+          animation-iteration-count:  1 !important;
+}
+/* animation 'bursting' the balloon with a small increase in size followed by a sharp quick fade out  */
+@-webkit-keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  80% {
+    transform: scale(1.5);
+    opacity: 1;
+    visibility: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+    visibility: 0;
+  }
+}
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  80% {
+    transform: scale(1.5);
+    opacity: 1;
+    visibility: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+    visibility: 0;
   }
 }

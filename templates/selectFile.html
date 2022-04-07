@@ -1,0 +1,31 @@
+{% extends 'movingBackground.html' %}
+{% block pageTitle%}VirusPartial{% endblock %}
+{% block otherCSS %}
+
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='selectFile.css')}}">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+{% endblock %}
+
+{% block popout%} 
+
+<form method="POST" enctype="multipart/form-data" action="{{hash_search}}/">
+    <h1>Choose File to Upload:</h1>
+    <div>
+        <input type="file" class="fileSelect" id="file" name="file">
+    </div>
+    <div class = "buttonHolder"><span class = "fhack">
+        <input type="submit" class="approveBtn" value="Submit"></input>
+        <a class = "disapproveBtn" draggable = false href = "{{return_home}}">
+			Cancel
+		</a>
+    </span></div>
+</form>
+
+{% endblock %}
+
+{% block otherBodyContents%} 
+	
+
+
+{% endblock %}
