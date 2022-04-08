@@ -5,6 +5,7 @@ import pymongo
 import requests
 import json
 import re
+import math
 import hashlib
 from flask_cors import CORS, cross_origin
 
@@ -23,6 +24,7 @@ headers = {
     "Accept": "application/json",
     "x-apikey": "c6c1781bab81e19b1488b212a615a64bd9cb6318376a592d41fe79c8b703c18a",
 }
+
 
 def hashFile():
         f = request.files['file']
@@ -125,6 +127,49 @@ def updateOne(hashmd5):
     newhashjson = json.dumps(newhashinfo,default=json_util.default)
     return render_template("hashData.html", hash_JSON = newhashjson)
 
+def hashToJSON(hash):
+    today = date.today()
+    if(md5re.match(hash)):
+        print('recieved md5 hash...')
+        if(len(list(db['hashes'].find({'md5':hash}))) > 0):
+            print('hash exists in database!')
+            hashinfo = db['hashes'].find_one({'md5':hash})
+            hashjson = json.dumps(hashinfo,default=json_util.default)
+            upload_date = date.fromisoformat(hashinfo['db_insertion_date'])
+            delta = today - upload_date
+            print(delta, " since last update...")
+            if delta.days > 30:
+                return updateOne(hashjson['md5'])
+            return hashjson
+            
+    elif(sha1re.match(hash)):
+        print('recieved sha1 hash...')
+        if(len(list(db['hashes'].find({'sha1':hash}))) > 0):
+            print('hash exists in database!')
+            hashinfo = db['hashes'].find_one({'sha1':hash})
+            hashjson = json.dumps(hashinfo,default=json_util.default)
+            upload_date = date.fromisoformat(hashinfo['db_insertion_date'])
+            print(delta, " since last update...")
+            if delta.days > 30:
+                return updateOne(hashjson['md5'])
+            return hashjson
+            
+    elif(sha256re.match(hash)):
+        print('recieved sha256 hash...')
+        if(len(list(db['hashes'].find({'sha256':hash}))) > 0):
+            print('hash exists in database!')
+            hashinfo = db['hashes'].find_one({'sha256':hash})
+            hashjson = json.dumps(hashinfo,default=json_util.default)
+            upload_date = date.fromisoformat(hashinfo['db_insertion_date'])
+            delta = today - upload_date
+            print(delta, " since last update...")
+            if delta.days > 30:
+                return updateOne(hashjson['md5'])
+            return hashjson
+    return hashjson
+
+
+
 @driver_api.route("/test")
 def test():
     return "you found me!"
@@ -177,7 +222,11 @@ def getHash():
     return insertNew(hash)
 
 cors = CORS(driver_api)
-# driver_api.config['CORS_HEADERS'] = 'Content-Type'
+
+
+
+
+
 
 @driver_api.route('/rawHash/', methods = ["GET"])
 @cross_origin()
@@ -230,4 +279,54 @@ def rawHash():
             
     return insertNew(hash)
 
+@driver_api.route('/fancyHash/', methods = ["GET", "POST"])
+def dressedHash():
+    if request.method == "GET":
+        hash = request.args.get('hash')
+    else:
+        hash = hashFile()
 
+    dat = json.loads(hashToJSON(hash))
+
+    neither = dat["last_analysis_stats"]["undetected"]
+    malicious = dat["last_analysis_stats"]["malicious"]
+    harmless = dat["last_analysis_stats"]["harmless"]
+    suspicious = dat["last_analysis_stats"]["suspicious"]
+    total = neither + malicious + suspicious + harmless
+    threat_calc = ((malicious*1.2 - harmless*1.2) + (suspicious*0.5)) / (total)
+    threat_calc *= 100
+    threat_calc = min( math.floor(threat_calc), 100)
+
+    fileStats = []
+    fileStats.append(dat["names"][0])
+    fileStats.append(dat["type_description"])
+    fileStats.append(malicious)
+    fileStats.append(suspicious)
+    fileStats.append(harmless)
+    fileStats.append(neither)
+    fileStats.append(dat["sha256"])
+    fileStats.append(dat["sha1"])
+    fileStats.append(dat["md5"])
+    fileStats.append(dat["type_description"])
+
+    rslts = []
+    for k in dat["last_analysis_results"].keys():
+        service = dat["last_analysis_results"][k]
+        tmp = []
+        tmp.append(service["engine_name"])
+        if service["category"] == "malicious":
+            tmp.append("red")
+            tmp.append(service['category'])
+            tmp.append('fa-circle-xmark')
+        elif service["category"] == "harmless":
+            tmp.append("green")
+            tmp.append(service['category'])
+            tmp.append("fa-circle-check")
+        else:
+            tmp.append("black")
+            tmp.append(service['category'])
+            tmp.append("fa-circle-question")
+        rslts.append(tmp)
+
+    return render_template("hashResults.html", threat_level = threat_calc, file_info = fileStats, results = rslts)
+pass #EOF

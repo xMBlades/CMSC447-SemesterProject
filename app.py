@@ -22,14 +22,14 @@ def ping():
 @app.route("/selectFile")
 def selectFile():
 
-    hashSearch = "/driver/hashinfo"
+    hashSearch = "/driver/fancyHash"
     returnHome = "/home"
     return render_template("selectFile.html", return_home = returnHome, hash_search = hashSearch)
 
 @app.route("/enterHash")
 def enterHash():
     
-    hashSearch = "/driver/hashinfo"
+    hashSearch = "/driver/fancyHash"
     returnHome = "/home"
     return render_template("enterHash.html", return_home = returnHome, hash_search = hashSearch)
 
