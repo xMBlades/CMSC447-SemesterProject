@@ -47,6 +47,7 @@ def insertNew(hash):
     print('inserting new hash ', hash)
     today = date.today()
     print('fetching hash from Virus Total...')
+    print("GET", url+hash)
     response = requests.request("GET", url+hash, headers=headers)
     print(response.text)
     responsejson = json.loads(response.text)
