@@ -7,7 +7,7 @@ import json
 import re
 import math
 import hashlib
-# from flask_cors import CORS, cross_origin
+from flask_cors import CORS, cross_origin
 
 
 
@@ -24,15 +24,6 @@ headers = {
     "Accept": "application/json",
     "x-apikey": "c6c1781bab81e19b1488b212a615a64bd9cb6318376a592d41fe79c8b703c18a",
 }
-headers2 = {
-    "Accept": "application/json",
-    "x-apikey": "382b7996b9f689b0abd1848ceefe9a31e97afdd5bd575e9766ca9d5c68322ce3"
-}
-
-headers3 = {
-    "Accept": "application/json",
-    "x-apikey": "40582ad863ff601e38885a20c9220954d0b41c0bb6cb99fc8e658e66893970a4"
-}
 
 
 def hashFile():
@@ -48,24 +39,11 @@ def insertNew(hash):
     today = date.today()
     print('fetching hash from Virus Total...')
     response = requests.request("GET", url+hash, headers=headers)
-    print(response.text)
     responsejson = json.loads(response.text)
     try:
         attributes = responsejson['data']['attributes']
     except KeyError:
-        response = requests.request("GET", url+hash, headers=headers2)
-        print(response.text)
-        responsejson = json.loads(response.text)
-        try:
-            attributes = responsejson['data']['attributes']
-        except KeyError:
-            response = requests.request("GET", url+hash, headers=headers3)
-            print(response.text)
-            responsejson = json.loads(response.text)
-            try:
-                attributes = responsejson['data']['attributes']
-            except KeyError:
-                return 'error: 404'
+        return 'error: 404'
     
     last_analysis_results = md5 = sha1 = sha256 = creation_date = size = type_description = signature_info = names = signers = counter_signers = hashcopyright = last_submission_date  = last_analysis_stats = ""
     if 'md5' in attributes: md5 = attributes['md5'] 
@@ -108,7 +86,6 @@ def updateOne(hashmd5):
     today = date.today()
     print('fetching hash from Virus Total...')
     response = requests.request("GET", url+hash, headers=headers)
-    print(response.text)
     responsejson = json.loads(response.text)
     try:
         attributes = responsejson['data']['attributes']
@@ -298,7 +275,7 @@ def getHash():
 def rawHash():
 
     if request.method == "GET":
-        # print('raw JSON requested')
+        print('raw JSON requested')
         hash = request.args.get('hash')
     else:
         hash = hashFile()
@@ -315,7 +292,7 @@ def rawHash():
             print(delta, " since last update...")
             if delta.days > 30:
                 updateOne(hashjson['md5'])
-            return dressupJSON(hashjson)
+            return dressupJSON(hashinfo)
             
     elif(sha1re.match(hash)):
         print('recieved sha1 hash...')
@@ -327,7 +304,7 @@ def rawHash():
             print(delta, " since last update...")
             if delta.days > 30:
                 updateOne(hashjson['md5'])
-            return dressupJSON(hashjson)
+            return dressupJSON(hashinfo)
             
     elif(sha256re.match(hash)):
         print('recieved sha256 hash...')
@@ -340,6 +317,6 @@ def rawHash():
             print(delta, " since last update...")
             if delta.days > 30:
                 updateOne(hashjson['md5'])
-            return dressupJSON(hashjson)
+            return dressupJSON(hashinfo)
             
     return insertNew(hash)

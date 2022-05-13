@@ -5,20 +5,21 @@
 	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='selectFile.css')}}">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
+
 {% endblock %}
 {% block abovePopout%} {% endblock %}
 
 {% block popout%} 
 
-<form method="POST" enctype="multipart/form-data" action="{{hash_search}}/">
+<form method="POST" enctype="multipart/form-data">
     <h1>Choose File to Upload:</h1>
     <div>
         <input type="file" class="fileSelect" id="file" name="file">
     </div>
     <div class = "buttonHolder"><span class = "fhack">
-        <input type="submit" class="approveBtn" value="Submit"></input>
+        <!-- <input type="submit" class="approveBtn" value="Submit"></input> -->
         <a class = "disapproveBtn" draggable = false href = "{{return_home}}">
-			Cancel
+			Back
 		</a>
     </span></div>
 </form>
@@ -26,7 +27,66 @@
 {% endblock %}
 
 {% block otherBodyContents%} 
-	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://bridget.coffee/static/md5.js"></script>
+<script>
 
+$.extend(
+{
+    redirectGet: function(location, args)
+    {
+        var form = '';
+        $.each( args, function( key, value ) {
+            value = value.split('"').join('\"')
+            form += '<input type="hidden" name="'+key+'" value="'+value+'">';
+        });
+        $('<form action="' + location + '" method="GET">' + form + '</form>').appendTo($(document.body)).submit();
+    }
+});
+
+
+
+
+
+
+var holder = document.getElementById('file');
+
+var fileData = "";
+
+holder.ondragover = function() {
+  return false;
+};
+
+holder.ondragend = function() {
+  return false;
+};
+
+holder.ondrop = function (event) {
+    fileData = event.dataTransfer.files[0];
+    submitForm(event.dataTransfer.files[0]);
+};
+
+function submitPressed(event) {
+  event.preventDefault();  
+}
+
+
+function submitForm(files) {
+  
+
+  var file = files;
+  var reader = new FileReader();
+
+  reader.onload = function(event) {
+    var binary = event.target.result;
+    var sha256 = CryptoJS.MD5(binary).toString();
+    console.log(sha256);
+    $.redirectGet("{{hash_search}}", {hash: sha256});
+  };
+
+  reader.readAsBinaryString(file);
+}
+
+</script>
 
 {% endblock %}
