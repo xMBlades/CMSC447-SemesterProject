@@ -5,36 +5,45 @@ import requests
 import json
 import re
 import math
+import secrets
 import hashlib
 import os
+import random
 import mysql.connector
 from werkzeug.utils import secure_filename
 USER_DB_NAME = "userDB"
+UPLOAD_FOLDER = "static/images/userImgs"
+ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg", "gif"]
+SALT_LENGTH = 32
 
-# mycursor = None
-# try:
-# 	mydb = mysql.connector.connect(
-# 		host="localhost",
-# 		user="8281E76A144CF7EC18D8030B6142134F", #MD5 hash of UserDatabaseUsername
-# 		password="69BBCAB266F45C077F1362B104BDBF1E", #MD5 hash of UserDatabasePassword
-# 		database= USER_DB_NAME
-# 	)
+mycursor = None
+try:
+	mydb = mysql.connector.connect(
+		host="localhost",
+		user="8281E76A144CF7EC18D8030B6142134F", #MD5 hash of UserDatabaseUsername
+		password="69BBCAB266F45C077F1362B104BDBF1E", #MD5 hash of UserDatabasePassword
+		port = '3360',
+		database= USER_DB_NAME
+	)
 
+	
+	mycursor = mydb.cursor()
 
-# 	mycursor = mydb.cursor()
+	
 
-# 	mycursor.execute("CREATE TABLE users (name VARCHAR(255), address VARCHAR(255))")
+except:
+	mydb = mysql.connector.connect(
+	  host="localhost",
+	  user="8281E76A144CF7EC18D8030B6142134F", #MD5 hash of UserDatabaseUsername
+	  password="69BBCAB266F45C077F1362B104BDBF1E", #MD5 hash of UserDatabasePassword
+	  port = '3360',
+	  database= USER_DB_NAME
+	)
 
-# except:
-# 	mydb = mysql.connector.connect(
-# 	  host="localhost",
-# 	  user="8281E76A144CF7EC18D8030B6142134F", #MD5 hash of UserDatabaseUsername
-# 	  password="69BBCAB266F45C077F1362B104BDBF1E" #MD5 hash of UserDatabasePassword
-# 	)
+	mycursor = mydb.cursor()
 
-# 	mycursor = mydb.cursor()
-
-# 	mycursor.execute("CREATE DATABASE " +  USER_DB_NAME)
+	# mycursor.execute("CREATE DATABASE " +  USER_DB_NAME)
+# mycursor.execute("CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), fname VARCHAR(255), lname VARCHAR(255), email VARCHAR(255), password VARCHAR(255),  imgURL VARCHAR(255), salt VARCHAR(255))")	
 
 
 
@@ -43,8 +52,6 @@ USER_DB_NAME = "userDB"
 
 user_api = Blueprint('user_api', __name__)
 
-UPLOAD_FOLDER = "static/images/userImgs"
-ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg", "gif"]
 
 
 @user_api.route('/uploads/<name>')
@@ -80,16 +87,34 @@ def storeUserImg(file):
 @user_api.route('/register/', methods = ["GET", "POST"])
 def registerUsr():
 	if  request.method == "POST":
-		username = request.args.get('usrname')
-		email = request.args.get('email')
-		password = request.args.get('pass')
-		fileToUpload = request.args.get('pass')
+		username = request.form.get('usrname')
+		print('usrname:', username)
+		email = request.form.get('email')
+		print('email:', email)
+		password = request.form.get('pass')
+		print('pass:', password)
+		# fileToUpload = request.form.get('pass')
 		usrImgUrl = storeUserImg(request.files['fileToUpload'])
-		fname = request.args.get('fname')
-		lname = request.args.get('lname')
-		return usrImgUrl
+
+		fname = request.form.get('fname')
+		lname = request.form.get('lname')
+		salt = secrets.token_urlsafe(SALT_LENGTH//2) #Generate a BASE64 salt to add to the end of the user's password, hash password with that token to store.
+
+		sha256 = hashlib.sha256()
+		sha256.update((password + salt).encode('UTF-8'))
+
+		storablePW = sha256.hexdigest()
+
+		sql = "INSERT INTO users (username, fname, lname, email, password,  imgURL, salt) VALUES (%s, %s, %s, %s, %s,  %s, %s)"
+		val = (username, fname, lname, email, storablePW, usrImgUrl, salt)
+		mycursor.execute(sql, val)
+
+		mydb.commit()
+
+
+		return  "record #" + str(mycursor.rowcount) + " inserted."
         
 	else:
-		return render_template("registrationPage.html", form_action = "#")
+		return render_template("registrationPage.html")
 
 
