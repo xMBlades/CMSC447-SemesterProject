@@ -14,7 +14,7 @@
 <form method="POST" enctype="multipart/form-data">
     <h1>Choose File to Upload:</h1>
     <div>
-        <input type="file" class="fileSelect" id="fileInput" name="file">
+        <input type="file" class="fileSelect" id="fileInput" name="file" >
     </div>
     <div class = "buttonHolder"><span class = "fhack">
         <!-- <input type="submit" class="approveBtn" value="Submit"></input> -->
@@ -64,6 +64,11 @@ holder.ondragend = function() {
 holder.ondrop = function (event) {
     fileData = event.dataTransfer.files[0];
     submitForm(event.dataTransfer.files[0]);
+};
+
+holder.onchange =  () => {
+    fileData = holder.files[0];
+    submitForm(fileData);
 };
 
 function submitPressed(event) {

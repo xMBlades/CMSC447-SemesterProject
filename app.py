@@ -6,6 +6,7 @@
 
 from flask import Flask, request, render_template
 from driver import driver_api
+from userbase import user_api
 import sqlite3
 from sqlite3 import Error
 import sys
@@ -13,6 +14,10 @@ import sys
 app = Flask(__name__)
 
 app.register_blueprint(driver_api, url_prefix='/driver')
+app.add_url_rule(
+    "/uploads/<name>", endpoint="download_file", build_only=True
+)
+app.register_blueprint(user_api, url_prefix='/users')
 
 @app.route("/ping")
 def ping():

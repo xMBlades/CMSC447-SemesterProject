@@ -18,6 +18,7 @@
     line-height: 6vh;
     color: #fff;
     cursor: pointer;
+    border-radius: 16px;
   }
   .approveBtn:focus {
     transition: none;
@@ -56,6 +57,7 @@
     color: #fff;
     text-decoration:none;
     cursor: pointer;
+    border-radius: 16px;
   }
   .disapproveBtn:hover {
     background: linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
@@ -66,6 +68,7 @@
     top: 2px;
   }
   .popout{
+    color: black;
       position:relative;
       margin: auto;
       top: 20%;
@@ -86,6 +89,7 @@
       width: 0px;
   }
   .fileSelect {
+    color: black;
     width: 75%;
     height: 100%;
     margin: auto;

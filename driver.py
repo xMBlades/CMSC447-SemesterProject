@@ -316,7 +316,7 @@ def rawHash():
             print(delta, " since last update...")
             if delta.days > 30:
                 updateOne(hashjson['md5'])
-            return dressupJSON(hashjson)
+            return dressupJSON(hashinfo)
             
     elif(sha1re.match(hash)):
         print('recieved sha1 hash...')
@@ -328,7 +328,7 @@ def rawHash():
             print(delta, " since last update...")
             if delta.days > 30:
                 updateOne(hashjson['md5'])
-            return dressupJSON(hashjson)
+            return dressupJSON(hashinfo)
             
     elif(sha256re.match(hash)):
         print('recieved sha256 hash...')
@@ -341,6 +341,6 @@ def rawHash():
             print(delta, " since last update...")
             if delta.days > 30:
                 updateOne(hashjson['md5'])
-            return dressupJSON(hashjson)
+            return dressupJSON(hashinfo)
             
     return insertNew(hash)
