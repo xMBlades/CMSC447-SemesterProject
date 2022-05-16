@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, url_for, send_from_directory
+from flask import Flask, Blueprint, request, render_template, url_for, send_from_directory
 from datetime import date
 from bson import json_util
 import requests
@@ -9,8 +9,13 @@ import secrets
 import hashlib
 import os
 import random
+import pickle
 import mysql.connector
 from werkzeug.utils import secure_filename
+# from flask_login import LoginManager
+# login_manager.login_view = 'login'
+# login_manager = LoginManager()
+
 USER_DB_NAME = "userDB"
 UPLOAD_FOLDER = "static/images/userImgs"
 ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg", "gif"]
@@ -74,26 +79,12 @@ def storeUserImg(file):
 
 
 
-
-# usrname: 123456
-# email: 123456
-# pass: 123456
-# cpass: 123456
-# fileToUpload: (binary)
-# fname: 123
-# lname: 123
-# submit: Submit
-
 @user_api.route('/register/', methods = ["GET", "POST"])
 def registerUsr():
 	if  request.method == "POST":
 		username = request.form.get('usrname')
-		print('usrname:', username)
 		email = request.form.get('email')
-		print('email:', email)
 		password = request.form.get('pass')
-		print('pass:', password)
-		# fileToUpload = request.form.get('pass')
 		usrImgUrl = storeUserImg(request.files['fileToUpload'])
 
 		fname = request.form.get('fname')
@@ -105,8 +96,10 @@ def registerUsr():
 
 		storablePW = sha256.hexdigest()
 
-		sql = "INSERT INTO users (username, fname, lname, email, password,  imgURL, salt) VALUES (%s, %s, %s, %s, %s,  %s, %s)"
-		val = (username, fname, lname, email, storablePW, usrImgUrl, salt)
+		emptyField = str(pickle.dumps([]))
+
+		sql = "INSERT INTO users (username, fname, lname, email, password,  imgURL, salt, requests) VALUES (%s, %s, %s, %s, %s,  %s, %s)"
+		val = (username, fname, lname, email, storablePW, usrImgUrl, salt, emptyField)
 		mycursor.execute(sql, val)
 
 		mydb.commit()
@@ -118,3 +111,27 @@ def registerUsr():
 		return render_template("registrationPage.html")
 
 
+# @login_manager.user_loader
+# def load_user(user_id):
+#     return User.get(user_id)
+
+
+@user_api.route('/login', methods=['GET', 'POST'])
+def login():
+	if  request.method == "POST":
+		username = request.form.get('usrname')
+		password = request.form.get('pass')
+	    # info = json.loads(request.data)
+	    # username = info.get('username', 'guest')
+	    # password = info.get('password', '') 
+	    # user = User.objects(name=username,
+	    #                     password=password).first()
+	    # if user:
+	    #     login_user(user)
+	    #     return jsonify(user.to_json())
+	    # else:
+	    #     return jsonify({"status": 401,
+	    #                     "reason": "Username or Password Error"})
+	    return "POST REQUEST"
+	else:
+		return render_template("loginPage.html", register_url = "/register/")

@@ -4,14 +4,23 @@
 #pip freeze for venv
 #render_template
 
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, session
 from driver import driver_api
 from userbase import user_api
 import sqlite3
+from datetime import timedelta
 from sqlite3 import Error
+import secrets
 import sys
+# from flask_login import LoginManager
+# login_manager = LoginManager()
+
 
 app = Flask(__name__)
+app.secret_key = secrets.token_urlsafe(16)
+app.permanent_session_lifetime = timedelta(minutes=50)
+# login_manager.init_app(app)
+# Session(app)
 
 app.register_blueprint(driver_api, url_prefix='/driver')
 app.add_url_rule(
