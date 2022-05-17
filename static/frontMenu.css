@@ -7,52 +7,92 @@
   margin:auto;
   margin-top: 2vh;
 }
+
+.titleImage{
+	margin-top: 150px;
+	text-align:center;
+}
+
 .popout{
 	position:relative;
 	margin: auto;
-	top: 20%;
+	top: 5%;
 	min-width: 220px;
-	max-width: 50vw;
+	max-width: 40vw;
 	height: fit-content;
-	background-color: lightgrey;
-	border-radius: 3%;
+	background-color: lightgray;
+	border: solid;
+	border-width: medium;
+	border-color:gray;
+	border-radius: 8%;
 	z-index: 3;
 	text-align: center;
 }
-.buttonHolder{
-	margin: auto;
-	width: 100%;
-	padding-bottom: 20px;
+
+nav {
+	margin: 27px auto 0;
+
+	position: relative;
+	width: 550px;
+	height: 80px;
+	background-color: #34495e;
+	border-radius: 8px;
+	font-size: 0;
+	bottom: 15px;
 }
-.fhack{
+nav a {
+	line-height: 80px;
+	height: 100%;
+	font-size: 15px;
+	display: inline-block;
+	position: relative;
+	z-index: 1;
+	text-decoration: none;
+	text-transform: uppercase;
+	text-align: center;
+	color: white;
+	cursor: pointer;
+}
+nav .transition {
+	position: absolute;
+	height: 100%;
+	top: 0;
+	z-index: 0;
+	transition: all .5s ease 0s;
+	border-radius: 8px;
+}
+a:nth-child(1) {
+	width: 200px;
+}
+a:nth-child(2) {
+	width: 200px;
+}
+a:nth-child(3) {
+	width: 150px;
+}
+a:nth-child(4){
 	width: 0px;
 }
 
-.approveBtn {
-	display: inline-block;
-	border-radius: 0px;
-	font-size: 18px;
-	font-family: Arial;
-	margin: auto;
-	background: #4444cc80;
-	width: 10vw;
-	max-width: 25%;
-	max-height: 100%;
-	text-align: center;
-	line-height: 6vh;
-	color: #fff;
-	text-decoration:none;
-	cursor: pointer;
+nav .uploadFile, a:nth-child(1):hover~.transition {
+	width: 200px;
+	left: 0;
+	background-color: #1abc9c;
 }
-.approveBtn:hover {
-	background:linear-gradient(to bottom, #415989 5%, #4269a6 100%);
-	background-color:#415989;
+nav .enterHash, a:nth-child(2):hover~.transition {
+	width: 200px;
+	left: 200px;
+	background-color: #1abc9c;
 }
-.approveBtn:hover:active {
-	position:relative;
-	top:1px;
+nav .more, a:nth-child(3):hover~.transition {
+	width: 150px;
+	left: 400px;
+	background-color: #1abc9c;
 }
-
+nav .home, a:nth-child(4): hover~.transition {
+	width: 0px;
+	left: 0px;
+}
 h1 {
-	padding: 20px;
+	padding: 15px;
 }
