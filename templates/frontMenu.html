@@ -10,15 +10,16 @@
 
 {% if logged_in == True : %}
 <div class="bar">      
-	<a href="users/logout" class="logout">Logout</a>
-	<img src="{{url_for('static', filename='images/logo-png.png')}}" alt="Welcome" style="max-width: 20vw;max-height: 100%;">
+
+	<a href="/home"><img src="{{url_for('static', filename='images/logo-png.png')}}" alt="Welcome" style="max-width: 20vw;max-height: 100%;"></a>
 	<p class="fname">{{fname}}</p>
 	<p class="lname">{{lname}}</p>
+	<a href="users/logout" class="logbutton">Logout</a>
 	<div class="photo"><a href="{{user_page}}"><img src="{{img_src}}" id="usrImg"></a></div>
 </div>
 {% else %}
 <div class="bar">      
-	<img src="{{url_for('static', filename='images/logo-png.png')}}" alt="Welcome" style="max-width: 20vw;max-height: 100%;">
+	<a href="/home"><img src="{{url_for('static', filename='images/logo-png.png')}}" alt="Welcome" style="max-width: 20vw;max-height: 100%;"></a>
 	<a href="users/register" class="logbutton">Register</a>
 	<a href="users/login" class="logbutton">Login</a>
 </div>
