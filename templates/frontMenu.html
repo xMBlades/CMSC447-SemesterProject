@@ -6,8 +6,22 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 
 {% endblock %}
-{% block abovePopout%} {% endblock %}
+{% block abovePopout%}
+
+{% if logged_in == True : %}
+<div class="bar">      
+	<a href="/logout" class="logout">Logout</a>
+	<img src="{{url_for('static', filename='images/logo-png.png')}}" alt="Welcome" style="max-width: 20vw;max-height: 100%;">
+	<p class="fname">{{fname}}</p>
+	<p class="lname">{{lname}}</p>
+	<div class="photo"><a href="{{user_page}}"><img src="{{img_src}}" id="usrImg"></a></div>
+</div>
+{% endif %}
+
+
+{% endblock %}
 {% block popout%} 
+
 <h1>Please Select An Option:</h1>
 		<div class = "buttonHolder"><span class = "fhack">
 			<a class = "approveBtn" draggable = false href = "{{button_link_A}}">

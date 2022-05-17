@@ -6,7 +6,7 @@
 
 from flask import Flask, request, render_template, session
 from driver import driver_api
-from userbase import user_api
+from userbase import user_api, SESSION
 import sqlite3
 from datetime import timedelta
 from sqlite3 import Error
@@ -14,7 +14,7 @@ import secrets
 import sys
 # from flask_login import LoginManager
 # login_manager = LoginManager()
-
+# g.user = {}
 
 app = Flask(__name__)
 app.secret_key = secrets.token_urlsafe(16)
@@ -60,6 +60,28 @@ def home():
     linkA = "/selectFile"
     linkB = "/enterHash"
     linkC = "/more"
-    return render_template("frontMenu.html", button_link_A = linkA, button_link_B = linkB, button_link_C = linkC,)
+    fname = ""
+    lname = ""
+    user_page = ""
+    img_src = ""
+    logged_in = False
+
+    try:
+        tmp = SESSION[request.cookies.get('userID')][:]
+        print("here!")
+        fname = tmp[2]
+        lname =  tmp[3]
+        user_page = ""
+        img_src =  tmp[4]
+        logged_in = True
+    except:
+        logged_in = False
 
 
+    return render_template("frontMenu.html", button_link_A = linkA, button_link_B = linkB, button_link_C = linkC, logged_in = logged_in, fname = fname, lname = lname, user_page = user_page, img_src = img_src)
+
+
+@app.route("/testing")
+def test():
+    test = "/users/register/"
+    return render_template("test", test=test)

@@ -56,3 +56,45 @@
 h1 {
 	padding: 20px;
 }
+.bar {
+    position: sticky;
+    top: 0px;
+    width: 100vw;
+    height: 10%;
+    background: #00000099;
+    z-index: 99;
+}
+.logout {
+    float: left;
+    /* top: 25%; */
+    border-radius: 12px;
+    margin-top: 1vh;
+    margin-right: 1vw;
+    background: #4444CC80;
+    text-align: center;
+    line-height: 7vh;
+    color: #fff;
+    width: 10%;
+    height: 80%;
+}
+.fname {
+    float: right;
+    padding: 1px 0.2em;
+}
+.lname {
+    float: right;
+    padding: 1px 0.2em;
+}
+.photo {
+    float: right;
+    margin-top: 0.25%;
+    padding: 1%;
+    border-radius: 3px;
+    height: 90%;
+    width: 9vh;
+    background: #000000;
+}
+#usrImg {
+    max-width: 100%;
+    max-height: 100%;
+}

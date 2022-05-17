@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, request, render_template, url_for, send_from_directory
+from flask import Flask, Blueprint, request, render_template, url_for, send_from_directory, make_response, redirect, g
 from datetime import date
 from bson import json_util
 import requests
@@ -15,7 +15,7 @@ from werkzeug.utils import secure_filename
 # from flask_login import LoginManager
 # login_manager.login_view = 'login'
 # login_manager = LoginManager()
-
+SESSION = {}
 USER_DB_NAME = "userDB"
 UPLOAD_FOLDER = "static/images/userImgs"
 ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg", "gif"]
@@ -32,7 +32,7 @@ try:
 	)
 
 	
-	mycursor = mydb.cursor()
+	mycursor = mydb.cursor(buffered=True)
 
 	
 
@@ -45,7 +45,7 @@ except:
 	  database= USER_DB_NAME
 	)
 
-	mycursor = mydb.cursor()
+	mycursor = mydb.cursor(buffered=True)
 
 	# mycursor.execute("CREATE DATABASE " +  USER_DB_NAME)
 # mycursor.execute("CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), fname VARCHAR(255), lname VARCHAR(255), email VARCHAR(255), password VARCHAR(255),  imgURL VARCHAR(255), salt VARCHAR(255))")	
@@ -78,6 +78,12 @@ def storeUserImg(file):
 
 
 
+def getUser(cookie):
+	try:
+		return SESSION[cookie]
+	except:
+		return None
+
 
 @user_api.route('/register/', methods = ["GET", "POST"])
 def registerUsr():
@@ -96,9 +102,9 @@ def registerUsr():
 
 		storablePW = sha256.hexdigest()
 
-		emptyField = str(pickle.dumps([]))
+		emptyField = ''
 
-		sql = "INSERT INTO users (username, fname, lname, email, password,  imgURL, salt, requests) VALUES (%s, %s, %s, %s, %s,  %s, %s)"
+		sql = "INSERT INTO users (username, fname, lname, email, password,  imgURL, salt, requests) VALUES (%s, %s, %s, %s, %s,  %s, %s, %s)"
 		val = (username, fname, lname, email, storablePW, usrImgUrl, salt, emptyField)
 		mycursor.execute(sql, val)
 
@@ -115,23 +121,44 @@ def registerUsr():
 # def load_user(user_id):
 #     return User.get(user_id)
 
+@user_api.route('/logout', methods=['GET'])
+def logout():
+	userID = request.cookies.get('userID')
+	SESSION.pop(userID)
+	return redirect("../")
 
 @user_api.route('/login', methods=['GET', 'POST'])
 def login():
 	if  request.method == "POST":
-		username = request.form.get('usrname')
-		password = request.form.get('pass')
-	    # info = json.loads(request.data)
-	    # username = info.get('username', 'guest')
-	    # password = info.get('password', '') 
-	    # user = User.objects(name=username,
-	    #                     password=password).first()
-	    # if user:
-	    #     login_user(user)
-	    #     return jsonify(user.to_json())
-	    # else:
-	    #     return jsonify({"status": 401,
-	    #                     "reason": "Username or Password Error"})
-	    return "POST REQUEST"
+		username = request.form.get('username')
+		password = request.form.get('password')
+		print("Login Attempted for", username)
+
+		sql = "SELECT * FROM users WHERE username LIKE '" + username + "'"
+		# val = (username, fname, lname, email, storablePW, usrImgUrl, salt, emptyField)
+		mycursor.execute(sql)
+
+		mydb.commit()
+
+		# print(sql)
+		myresult = mycursor.fetchall()
+		# counter = 0
+		# print(myresult[0][5], myresult[0][7])
+
+		sha256 = hashlib.sha256()
+		sha256.update((password +  myresult[0][7]).encode('UTF-8'))
+
+		storablePW = sha256.hexdigest()
+
+		if (storablePW == myresult[0][5]):
+			print("Login Succeed")
+			resp = make_response(redirect("../"))
+			token = secrets.token_urlsafe(32)
+			resp.set_cookie('userID', token)
+			SESSION.update({token: [myresult[0][0], username, myresult[0][2], myresult[0][3], myresult[0][6]]})
+			return resp
+		else:
+			resp = make_response(render_template("loginPage.html", register_url = "/register/", alert = True))
+			return resp
 	else:
-		return render_template("loginPage.html", register_url = "/register/")
+		return render_template("loginPage.html", register_url = "/register/", alert = False)

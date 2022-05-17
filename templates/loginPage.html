@@ -330,9 +330,12 @@
     	    <img src="{{url_for('static', filename='images/logo-png.png')}}" alt="Virus Partial" style="min-width: 20wv;max-width: 50vw;max-height: 32vh;">
     		<!--<h1>Welcome</h1>-->
     		    <br>
-            <span id="waitMsg" style="display:none"> One Moment Please... </span>  
+            <span id="waitMsg" style="display:none"> One Moment Please... </span>
+            {% if alert == True %}
+            <span id="alertMsg" style="color:red"> Incorrect Username/Password </span>  
+            {% endif %}
     		       		   
-    		      		 <form class="form-signin" role="form" method="post" data-bitwarden-watching="1">
+    		      		 <form class="form-signin" role="form" method="post">
     		     
     			<input type="text" name="username" placeholder="Username" required="" autofocus="">
     			<input type="password" name="password" placeholder="Password" required="">
