@@ -40,6 +40,13 @@ def selectFile():
     returnHome = "/home"
     return render_template("selectFile.html", return_home = returnHome, hash_search = hashSearch)
 
+@app.route("/selectFolder")
+def selectFolder():
+
+    hashSearch = "/driver/fancyHash"
+    returnHome = "/home"
+    return render_template("selectFolder.html", return_home = returnHome, hash_search = hashSearch)
+
 @app.route("/enterHash")
 def enterHash():
     
