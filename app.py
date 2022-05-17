@@ -61,5 +61,7 @@ def home():
     linkB = "/enterHash"
     linkC = "/more"
     return render_template("frontMenu.html", button_link_A = linkA, button_link_B = linkB, button_link_C = linkC,)
-
-
+@app.route("/testing")
+def test():
+    test = "/users/register/"
+    return render_template("test", test=test)

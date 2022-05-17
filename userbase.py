@@ -132,6 +132,6 @@ def login():
 	    # else:
 	    #     return jsonify({"status": 401,
 	    #                     "reason": "Username or Password Error"})
-	    return "POST REQUEST"
+		return "POST REQUEST"
 	else:
 		return render_template("loginPage.html", register_url = "/register/")
