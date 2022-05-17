@@ -60,8 +60,8 @@ h1 {
     position: sticky;
     top: 0px;
     width: 100vw;
-    height: 10%;
-    background: #00000099;
+    height: 5%;
+    background: #5b817999;
     z-index: 99;
 }
 .logout {
@@ -76,6 +76,25 @@ h1 {
     color: #fff;
     width: 10%;
     height: 80%;
+    transition: all .4s ease;
+}
+.logbutton {
+    float: right;
+    /* top: 25%; */
+    position: relative;
+    bottom: 8px;
+    text-align: center;
+    line-height: 7vh;
+    text-decoration: none;
+    font-size: 22px;
+	font-family: Arial;
+    color: #fff;
+    width: 10%;
+    height: 80%;
+}
+.logbutton:hover {
+    color: #10c79f;
+    transform: scale(1.15)
 }
 .fname {
     float: right;

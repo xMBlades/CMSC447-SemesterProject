@@ -12,6 +12,9 @@ import random
 import pickle
 import mysql.connector
 from werkzeug.utils import secure_filename
+#test
+from driver import driver_api
+
 # from flask_login import LoginManager
 # login_manager.login_view = 'login'
 # login_manager = LoginManager()
@@ -56,7 +59,7 @@ except:
 
 
 user_api = Blueprint('user_api', __name__)
-
+user_api.register_blueprint(driver_api, url_prefix='/driver')
 
 
 @user_api.route('/uploads/<name>')

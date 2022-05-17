@@ -87,8 +87,3 @@ def home():
 
     return render_template("frontMenu.html", button_link_A = linkA, button_link_B = linkB, button_link_C = linkC, logged_in = logged_in, fname = fname, lname = lname, user_page = user_page, img_src = img_src)
 
-
-@app.route("/testing")
-def test():
-    test = "/users/register/"
-    return render_template("test", test=test)
