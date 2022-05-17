@@ -37,8 +37,48 @@ percent-gauge {
 	display: table;
 	text-align: left;
 	width: 100%;
-	font-size: 1.2em;
-	
+	font-size: 1.2em;	
+}
+.bar {
+    position: sticky;
+    top: 0px;
+    width: 100vw;
+    height: 5%;
+    background: #a5a5a586;
+    z-index: 99;
+}
+.logout {
+    float: left;
+    /* top: 25%; */
+    border-radius: 12px;
+    margin-top: 1vh;
+    margin-right: 1vw;
+    background: #4444CC80;
+    text-align: center;
+    line-height: 7vh;
+    color: #fff;
+    width: 10%;
+    height: 80%;
+    transition: all .4s ease;
+}
+.logbutton {
+    float: right;
+    /* top: 25%; */
+    position: relative;
+    bottom: 8px;
+    text-align: center;
+    line-height: 7vh;
+    text-decoration: none;
+    font-size: 22px;
+	font-family: Arial;
+    color: #fff;
+    width: 10%;
+    height: 80%;
+}
+.logbutton:hover {
+    color: #10c79f;
+    transition: all 500ms ease;
+    transform: scale(1.15)
 }
 .rhs2{
 	font-size: min(max(10px, max(2.5vw, 10px)), 30px);

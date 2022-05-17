@@ -10,7 +10,14 @@
 {% endblock %}
 
 
-{% block abovePopout%} 
+{% block abovePopout%}
+
+<div class="bar">      
+
+	<a href="/home"><img src="{{url_for('static', filename='images/logo-png.png')}}" alt="Welcome" style="max-width: 20vw;max-height: 100%;"></a>
+
+</div>
+
 <template id="gaugeTemplate">
         <style>
             .gauge path {
