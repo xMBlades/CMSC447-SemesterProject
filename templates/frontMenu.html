@@ -6,25 +6,22 @@
 	<link rel="icon" href="/favicon.ico" type="image/x-icon">
 
 {% endblock %}
-
-{% block popout%} 
-<h1>Please Select An Option:</h1>
-		<div class = "buttonHolder"><span class = "fhack">
-			<a class = "approveBtn" draggable = false href = "{{button_link_A}}">
-				Select A File
-			</a>
-			<a class = "approveBtn" draggable = false href = "{{button_link_B}}">
-				Enter A Hash
-			</a>
-			<a class = "approveBtn" draggable = false href = "{{button_link_C}}">
-				More
-			</a>
-		</span></div>
-
+{% block abovePopout%}
+<h1>
+	<div class = "titleImage">
+		<img width = "650" src = "static/images/logo-png.png"  >
+	</div>
+</h1>
+{% endblock %}
+{% block popout%}
+<h1 style = "color:gray;">Please Select An Option:</h1>
+	<nav>
+	<a href="#">Upload a File</a>
+	<a href="#">Enter A Hash</a>
+	<a href="#">More</a>
+	<div class="transition home"></div>
+	</nav>
 {% endblock %}
 
-{% block otherBodyContents%} 
-	
-
-
+{% block otherBodyContents%}
 {% endblock %}
