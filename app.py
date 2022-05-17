@@ -92,3 +92,22 @@ def home():
 def test():
     test = "/users/register/"
     return render_template("test", test=test)
+
+
+
+
+@app.route("/scanResults", methods = ["GET"])
+def scanResults():
+    results = [1, 2, 3]
+    counter = 0
+    resultList = ""
+    for r in results:
+        rslt_id = counter
+        rslt_name = "BepInEx/config/org.bepinex\ntyinjectorloader.cfg"
+        hosts_cleared = 15
+        hostsTotal = 64
+        file_type = "win32_dll"
+        
+        counter += 1
+        resultList = resultList + render_template("resultBox.html.j2", result_name =  rslt_name, result_id = rslt_id, hosts_cleared = hosts_cleared, hostsTotal = hostsTotal, file_type = file_type, color = "green")
+    return render_template("massResults.html", results = resultList)
