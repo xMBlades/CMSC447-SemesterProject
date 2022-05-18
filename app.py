@@ -51,7 +51,7 @@ def selectFolder():
 def enterHash():
     
     hashSearch = "/driver/fancyHash"
-    returnHome = "/home"
+    returnHome = "/home"   
     return render_template("enterHash.html", return_home = returnHome, hash_search = hashSearch)
 
 @app.route("/more")
@@ -87,27 +87,3 @@ def home():
 
     return render_template("frontMenu.html", button_link_A = linkA, button_link_B = linkB, button_link_C = linkC, logged_in = logged_in, fname = fname, lname = lname, user_page = user_page, img_src = img_src)
 
-
-@app.route("/testing")
-def test():
-    test = "/users/register/"
-    return render_template("test", test=test)
-
-
-
-
-@app.route("/scanResults", methods = ["GET"])
-def scanResults():
-    results = [1, 2, 3]
-    counter = 0
-    resultList = ""
-    for r in results:
-        rslt_id = counter
-        rslt_name = "BepInEx/config/org.bepinex\ntyinjectorloader.cfg"
-        hosts_cleared = 15
-        hostsTotal = 64
-        file_type = "win32_dll"
-        
-        counter += 1
-        resultList = resultList + render_template("resultBox.html.j2", result_name =  rslt_name, result_id = rslt_id, hosts_cleared = hosts_cleared, hostsTotal = hostsTotal, file_type = file_type, color = "green")
-    return render_template("massResults.html", results = resultList)
