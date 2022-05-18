@@ -46,6 +46,10 @@
 {% block otherBodyContents%}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="./script.js"></script>
 <script>
+	let wwidth = $( window ).width();
+	let scaleBy = wwidth/1920;
+	$("#responsiveWrapper").css("-webkit-transform", "scale(" + scaleBy  + ") translate(" + 180 * (scaleBy-1) + "px, 0px)");
+	$("#responsiveWrapper").css("transform", "scale(" + scaleBy  + ") translate(" + 180 * (scaleBy-1) + "px, 0px)");
 	$( window ).resize(function() {
 		let wwidth = $( window ).width();
 		let scaleBy = wwidth/1920;
