@@ -198,7 +198,7 @@ function queueFile (file, name){
             reader.readAsArrayBuffer(file.slice(start, end));
             start = end;
           } else {
-            $.post("{{enqueue_endpoint}}", {name: name, hash: current.hex()});
+            $.post("/enqueue", {name: name, hash: current.hex(), user: "{{userID}}"});
             // console.log("Name: " + name + " Hash: " + current.hex());
             // console.trace();
             // return current.hex();

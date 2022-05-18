@@ -104,6 +104,72 @@ def insertNew(hash):
     newhashjson = json.dumps(newhashinfo,default=json_util.default)
     return dressupJSON(newhashinfo)
 
+
+
+def insertNewHeadless(hash):
+    print('inserting new hash ', hash)
+    today = date.today()
+    print('fetching hash from Virus Total...')
+    print("GET", url+hash)
+    response = requests.request("GET", url+hash, headers=headers)
+    print(response.text)
+    responsejson = json.loads(response.text)
+    try:
+        attributes = responsejson['data']['attributes']
+    except KeyError:
+        response = requests.request("GET", url+hash, headers=headers2)
+        print(response.text)
+        responsejson = json.loads(response.text)
+        try:
+            attributes = responsejson['data']['attributes']
+        except KeyError:
+            response = requests.request("GET", url+hash, headers=headers3)
+            print(response.text)
+            responsejson = json.loads(response.text)
+            try:
+                attributes = responsejson['data']['attributes']
+            except KeyError:
+                return 'error: 404'
+    
+    last_analysis_results = md5 = sha1 = sha256 = creation_date = size = type_description = signature_info = names = signers = counter_signers = hashcopyright = last_submission_date  = last_analysis_stats = ""
+    if 'md5' in attributes: md5 = attributes['md5'] 
+    if 'sha1' in attributes: sha1 = attributes['sha1']
+    if 'sha256' in attributes: sha256 = attributes['sha256']
+    if 'creation_date' in attributes: creation_date = attributes['creation_date']
+    if 'size' in attributes: size = attributes['size']
+    if 'type_description' in attributes: type_description = attributes['type_description']
+    if 'signature_info' in attributes: signature_info = attributes['signature_info']
+    if 'names' in attributes: names = attributes['names']
+    if 'signature_info' in attributes and 'signers' in attributes['signature_info']: signers = attributes['signature_info']['signers']
+    if 'signature_info' in attributes and 'counter_signers' in attributes['signature_info']: counter_signers = attributes['signature_info']['counter signers']
+    if 'signature_info' in attributes and 'copyright' in attributes['signature_info']: hashcopyright = attributes['signature_info']['copyright']
+    if 'last_submission_date' in attributes: last_submission_date = attributes['last_submission_date']
+    if 'last_analysis_stats' in attributes: last_analysis_stats = attributes['last_analysis_stats']
+    if 'last_analysis_results' in attributes: last_analysis_results = attributes['last_analysis_results']
+    db['hashes'].insert_one({
+        'md5': md5,
+        'sha1': sha1,
+        'sha256': sha256,
+        'creation_date': creation_date,
+        'size': size,
+        'type_description' : type_description,
+        'signature_info' : signature_info,
+        'names' : names,
+        'signers' : signers,
+        'counter_signers': counter_signers,
+        'copyright' : hashcopyright,
+        'last_submission_date' : last_submission_date,
+        'last_analysis_stats' : last_analysis_stats,
+        'last_analysis_results' : last_analysis_results,
+        'db_insertion_date' : today.strftime("%Y-%m-%d")
+    })
+    newhashinfo = db['hashes'].find_one({'md5' : md5})
+    newhashjson = json.dumps(newhashinfo,default=json_util.default)
+    return sourcesSafe(newhashinfo)
+
+
+
+
 def updateOne(hashmd5):
     print('updating hash ', hashmd5)
     today = date.today()
@@ -344,3 +410,67 @@ def rawHash():
             return dressupJSON(hashinfo)
             
     return insertNew(hash)
+
+
+
+
+def massHash(hsh):
+
+    hash = hsh
+    today = date.today()
+    if(md5re.match(hash)):
+        print('recieved md5 hash...')
+
+        if(len(list(db['hashes'].find({'md5':hash}))) > 0):
+            print('hash exists in database!')
+            hashinfo = db['hashes'].find_one({'md5':hash})
+            hashjson = json.dumps(hashinfo,default=json_util.default)
+            upload_date = date.fromisoformat(hashinfo['db_insertion_date'])
+            delta = today - upload_date
+            print(delta, " since last update...")
+            if delta.days > 30:
+                updateOne(hashjson['md5'])
+            return sourcesSafe(hashinfo)
+            
+    elif(sha1re.match(hash)):
+        print('recieved sha1 hash...')
+        if(len(list(db['hashes'].find({'sha1':hash}))) > 0):
+            print('hash exists in database!')
+            hashinfo = db['hashes'].find_one({'sha1':hash})
+            hashjson = json.dumps(hashinfo,default=json_util.default)
+            upload_date = date.fromisoformat(hashinfo['db_insertion_date'])
+            print(delta, " since last update...")
+            if delta.days > 30:
+                updateOne(hashjson['md5'])
+            return sourcesSafe(hashinfo)
+            
+    elif(sha256re.match(hash)):
+        print('recieved sha256 hash...')
+        if(len(list(db['hashes'].find({'sha256':hash}))) > 0):
+            print('hash exists in database!')
+            hashinfo = db['hashes'].find_one({'sha256':hash})
+            hashjson = json.dumps(hashinfo,default=json_util.default)
+            upload_date = date.fromisoformat(hashinfo['db_insertion_date'])
+            delta = today - upload_date
+            print(delta, " since last update...")
+            if delta.days > 30:
+                updateOne(hashjson['md5'])
+            return sourcesSafe(hashinfo)
+            
+    return insertNewHeadless(hash)
+
+
+
+
+
+def sourcesSafe (jsn):
+    dat = jsn
+    neither = dat["last_analysis_stats"]["undetected"]
+    malicious = dat["last_analysis_stats"]["malicious"]
+    harmless = dat["last_analysis_stats"]["harmless"]
+    suspicious = dat["last_analysis_stats"]["suspicious"]
+    total = neither + malicious + suspicious + harmless
+    threat_calc = ((malicious*1.2 - harmless*1.2) + (suspicious*0.5)) / (total)
+    threat_calc *= 100
+    threat_calc = min( math.floor(threat_calc), 100)
+    return [neither + harmless, total]

@@ -5,17 +5,22 @@
 #render_template
 
 from flask import Flask, request, render_template, session
-from driver import driver_api
+from driver import driver_api, massHash
 from userbase import user_api, SESSION
 import sqlite3
 from datetime import timedelta
 from sqlite3 import Error
 import secrets
 import sys
+import time
+import atexit
+
+from apscheduler.schedulers.background import BackgroundScheduler
 # from flask_login import LoginManager
 # login_manager = LoginManager()
 # g.user = {}
-
+QUEUE = []
+RESULTS = {}
 app = Flask(__name__)
 app.secret_key = secrets.token_urlsafe(16)
 app.permanent_session_lifetime = timedelta(minutes=50)
@@ -45,7 +50,12 @@ def selectFolder():
 
     hashSearch = "/driver/fancyHash"
     returnHome = "/home"
-    return render_template("selectFolder.html", return_home = returnHome, hash_search = hashSearch)
+    uid = -1
+    try:
+        uid = SESSION[request.cookies.get('userID')][0]
+    except:
+        return "This feature is only for logged in users"
+    return render_template("selectFolder.html", return_home = returnHome, hash_search = hashSearch, userID = uid)
 
 @app.route("/enterHash")
 def enterHash():
@@ -87,3 +97,62 @@ def home():
 
     return render_template("frontMenu.html", button_link_A = linkA, button_link_B = linkB, button_link_C = linkC, logged_in = logged_in, fname = fname, lname = lname, user_page = user_page, img_src = img_src)
 
+@app.route("/scanResults", methods = ["GET"])
+def scanResults():
+    results = -1
+    try:
+        tmp = request.cookies.get('userID')
+        print(tmp)
+        tmp = SESSION[request.cookies.get('userID')]
+        print(tmp)
+        tmp = str(SESSION[request.cookies.get('userID')][0])
+        print(tmp)
+        print(RESULTS)
+        results = RESULTS[str(SESSION[request.cookies.get('userID')][0])]
+        print(results)
+    except:
+        return "No Results"
+    counter = 0
+    resultList = ""
+    for r in results:
+        rslt_id = r[1]
+        rslt_name = r[0]
+        hosts_cleared = r[2]
+        hostsTotal = r[3]
+        file_type = "File"
+
+        counter += 1
+        resultList = resultList + render_template("resultBox.html.j2", result_name =  rslt_name, result_id = rslt_id, hosts_cleared = hosts_cleared, hostsTotal = hostsTotal, file_type = file_type, color = "green")
+    return render_template("massResults.html", results = resultList)
+
+
+@app.route("/enqueue", methods = ["POST"])
+def enqueue():
+    tmp = {"name": request.form.get('name'), "hash": request.form.get('hash'), "user": request.form.get('user')}
+    QUEUE.append(tmp)
+    print("ADDED  {name:", request.form.get('name'), ", hash:", request.form.get('hash'), ", user:", request.form.get('user'), "}")
+    return "Okay!"
+
+def dequeue():
+    tmp = None
+    try:
+        tmp = QUEUE.pop(0)
+    except:
+        print("empty queue")
+        return "Empty"
+
+    scanRslt = massHash(tmp["hash"])
+    try:
+        RESULTS[tmp["user"]].append([tmp['name'], tmp['hash'], scanRslt[0], scanRslt[1]])
+
+    except KeyError:
+        RESULTS.update({tmp["user"] : [[tmp['name'], tmp['hash'], scanRslt[0], scanRslt[1]]]})
+    pass
+    print("REMOVED  ", tmp["name"], " from queue for user", tmp["user"])
+    # QUEUE.append(tmp)
+    return "Okay!"
+
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=dequeue, trigger="interval", seconds=30)
+scheduler.start()
