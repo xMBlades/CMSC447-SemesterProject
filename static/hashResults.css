@@ -12,6 +12,10 @@
 /* .inline-larger{
 	font-size: 1.58em;
 } */
+#usrImg {
+	max-width: 100%;
+	max-height: 100%;
+}
 .popout{
 	position:relative;
 	margin: auto;

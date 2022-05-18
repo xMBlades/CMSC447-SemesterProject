@@ -76,7 +76,10 @@ def home():
 
     linkA = "/selectFile"
     linkB = "/enterHash"
-    linkC = "/more"
+    linkC = "/users/login"
+    linkD = "/selectFolder"
+    linkE = "/scanResults"
+    linkF = "/users/register"
     fname = ""
     lname = ""
     user_page = ""
@@ -95,7 +98,7 @@ def home():
         logged_in = False
 
 
-    return render_template("frontMenu.html", button_link_A = linkA, button_link_B = linkB, button_link_C = linkC, logged_in = logged_in, fname = fname, lname = lname, user_page = user_page, img_src = img_src)
+    return render_template("frontMenu.html", button_link_A = linkA, button_link_B = linkB, button_link_C = linkC,  button_link_D = linkD, button_link_E = linkE, button_link_F = linkF, logged_in = logged_in, fname = fname, lname = lname, user_page = user_page, img_src = img_src)
 
 @app.route("/scanResults", methods = ["GET"])
 def scanResults():

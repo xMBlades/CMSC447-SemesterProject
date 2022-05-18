@@ -2,6 +2,7 @@ from flask import Blueprint, request, render_template
 from datetime import date
 from bson import json_util
 import pymongo
+from userbase import SESSION
 import requests
 import json
 import re
@@ -301,7 +302,24 @@ def dressupJSON(jsn):
             tmp.append("fa-circle-question")
         rslts.append(tmp)
 
-    return render_template("hashResults.html", threat_level = threat_calc, file_info = fileStats, results = rslts)
+    fname = ""
+    lname = ""
+    user_page = ""
+    img_src = ""
+    logged_in = False
+
+    try:
+        tmp = SESSION[request.cookies.get('userID')][:]
+        # print("here!")
+        fname = tmp[2]
+        lname =  tmp[3]
+        user_page = ""
+        img_src =  "../../" + tmp[4]
+        logged_in = True
+    except:
+        logged_in = False
+
+    return render_template("hashResults.html", threat_level = threat_calc, file_info = fileStats, results = rslts, logged_in = logged_in, fname = fname, lname = lname, user_page = user_page, img_src = img_src)
 
 
 

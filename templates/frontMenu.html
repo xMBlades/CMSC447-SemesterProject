@@ -33,11 +33,19 @@
 {% endblock %}
 {% block popout%}
 <h1 style = "color:gray;">Please Select An Option:</h1>
-<div id = "responsiveWrapper">
+<div class = "responsiveWrapper">
 	<nav>
 	<a href="{{button_link_A}}">Upload a File</a>
 	<a href="{{button_link_B}}">Enter A Hash</a>
-	<a href="{{button_link_C}}">More</a>
+	<a href="{{button_link_C}}">Login</a>
+	<div class="transition home"></div>
+	</nav>
+</div>
+<div class = "responsiveWrapper">
+	<nav>
+	<a href="{{button_link_D}}">Upload A Folder</a>
+	<a href="{{button_link_E}}">Check Scans</a>
+	<a href="{{button_link_F}}">Register</a>
 	<div class="transition home"></div>
 	</nav>
 </div>
