@@ -1,0 +1,36 @@
+{% extends 'movingBackground.html' %}
+{% block pageTitle%}VirusPartial{% endblock %}
+{% block abovePopout%} {% endblock %}
+{% block otherCSS %}
+
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='nullHash.css')}}">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+{% endblock %}
+
+<meta charset="UTF-8">
+<style>
+body {
+    font-size: 36px;
+}
+</style>
+
+{% block popout%} 
+<form method="GET" enctype="application/x-www-form-urlencoded" action="{{hash_search}}/">
+	<h1>404</h1>
+    <p>Our servers couldn't find your hash! Double check that your hash is entered correctly for manual searches.</p>
+    <p>If you reached this page after scanning a file, perhaps you are the author? &#129300;</p>
+	<div class = "buttonHolder"><span class = "fhack">
+		<a class = "disapproveBtn" draggable = false href = "{{return_home}}">
+			Return
+		</a>
+	</span></div>
+</form>
+
+{% endblock %}
+
+{% block otherBodyContents%} 
+
+
+
+{% endblock %}
