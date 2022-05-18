@@ -117,12 +117,16 @@ def scanResults():
         return "No Results"
     counter = 0
     resultList = ""
+
     for r in results:
         rslt_id = r[1]
         rslt_name = r[0]
         hosts_cleared = r[2]
         hostsTotal = r[3]
         file_type = "File"
+        color = "green"
+        if (int(r[2])/int(r[3]) <= 0.8):
+            color = "red"
 
         counter += 1
         resultList = resultList + render_template("resultBox.html.j2", result_name =  rslt_name, result_id = rslt_id, hosts_cleared = hosts_cleared, hostsTotal = hostsTotal, file_type = file_type, color = "green")

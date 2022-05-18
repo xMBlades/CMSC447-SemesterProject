@@ -56,13 +56,13 @@
 <script>
 	let wwidth = $( window ).width();
 	let scaleBy = wwidth/1920;
-	$("#responsiveWrapper").css("-webkit-transform", "scale(" + scaleBy  + ") translate(" + 180 * (scaleBy-1) + "px, 0px)");
-	$("#responsiveWrapper").css("transform", "scale(" + scaleBy  + ") translate(" + 180 * (scaleBy-1) + "px, 0px)");
+	$(".responsiveWrapper").css("-webkit-transform", "scale(" + scaleBy  + ") translate(" + 180 * (scaleBy-1) + "px, 0px)");
+	$(".responsiveWrapper").css("transform", "scale(" + scaleBy  + ") translate(" + 180 * (scaleBy-1) + "px, 0px)");
 	$( window ).resize(function() {
 		let wwidth = $( window ).width();
 		let scaleBy = wwidth/1920;
-		$("#responsiveWrapper").css("-webkit-transform", "scale(" + scaleBy  + ") translate(" + 180 * (scaleBy-1) + "px, 0px)");
-		$("#responsiveWrapper").css("transform", "scale(" + scaleBy  + ") translate(" + 180 * (scaleBy-1) + "px, 0px)");
+		$(".responsiveWrapper").css("-webkit-transform", "scale(" + scaleBy  + ") translate(" + 180 * (scaleBy-1) + "px, 0px)");
+		$(".responsiveWrapper").css("transform", "scale(" + scaleBy  + ") translate(" + 180 * (scaleBy-1) + "px, 0px)");
 	});
 
 </script>

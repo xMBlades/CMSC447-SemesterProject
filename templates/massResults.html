@@ -53,11 +53,8 @@
 
 <script type="text/javascript" src="{{url_for('static', filename='hashResults.js')}}"></script>
 <script>
-	function bookingClicked(bookingID){
-		console.log("Booking "  + bookingID);
-	}
-	function bookingClickedFull(bookingID){
-		console.log("FULL :( Booking "  + bookingID);
+	function resultClicked(bookingID){
+		window.location.href = "driver/fancyHash/?hash=" + bookingID;
 	}
 </script>
 
