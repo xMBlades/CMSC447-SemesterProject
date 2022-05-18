@@ -512,7 +512,7 @@ def scanLink():
             delta = today - upload_date
             print(delta, " since last update...")
             if delta.days > 30:
-                updateOne(hashjson['md5'])
+                updateOne(hashinfo['md5'])
             return dressupJSON(hashinfo)
             
     elif(sha1re.match(hash)):
@@ -524,7 +524,7 @@ def scanLink():
             upload_date = date.fromisoformat(hashinfo['db_insertion_date'])
             print(delta, " since last update...")
             if delta.days > 30:
-                updateOne(hashjson['md5'])
+                updateOne(hashinfo['md5'])
             return dressupJSON(hashinfo)
             
     elif(sha256re.match(hash)):
@@ -537,7 +537,7 @@ def scanLink():
             delta = today - upload_date
             print(delta, " since last update...")
             if delta.days > 30:
-                updateOne(hashjson['md5'])
+                updateOne(hashinfo['md5'])
             return dressupJSON(hashinfo)
             
     return insertNew(hash)
