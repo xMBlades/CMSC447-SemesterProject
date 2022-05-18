@@ -1,0 +1,114 @@
+.wrapper{
+	overflow: auto ;
+}
+.sideInfo{
+	text-align: left;
+/* 	float: none */
+	margin-left: 3%;
+	margin-top: 3%;
+/* 	background-color: red; */
+	width: 93.5%;
+}
+/* .inline-larger{
+	font-size: 1.58em;
+} */
+.popout{
+	position:relative;
+	margin: auto;
+	top: 20%;
+	min-width: 220px;
+	max-width: 70vw;
+	height: fit-content;
+	background-color: lightgrey;
+	border-radius: 3%;
+	z-index: 3;
+	text-align: center;
+	color: black;
+}
+percent-gauge {
+	display: table-cell;
+  width: min(21em, 50%);
+
+	margin-right: 1rem;
+  display:block;
+	float: left;
+}
+.gaugeNText{
+	display: table;
+	text-align: left;
+	width: 100%;
+	font-size: 1.2em;	
+}
+.bar {
+    position: sticky;
+    top: 0px;
+    width: 100vw;
+    height: 5%;
+    background: #a5a5a586;
+    z-index: 99;
+}
+.logout {
+    float: left;
+    /* top: 25%; */
+    border-radius: 12px;
+    margin-top: 1vh;
+    margin-right: 1vw;
+    background: #4444CC80;
+    text-align: center;
+    line-height: 7vh;
+    color: #fff;
+    width: 10%;
+    height: 80%;
+    transition: all .4s ease;
+}
+.logbutton {
+    float: right;
+    /* top: 25%; */
+    position: relative;
+    bottom: 8px;
+    text-align: center;
+    line-height: 7vh;
+    text-decoration: none;
+    font-size: 22px;
+	font-family: Arial;
+    color: #fff;
+    width: 10%;
+    height: 80%;
+}
+.logbutton:hover {
+    color: #10c79f;
+    transition: all 500ms ease;
+    transform: scale(1.15)
+}
+.rhs2{
+	font-size: min(max(10px, max(2.5vw, 10px)), 30px);
+}
+.badLogo{
+	content:  "\2612";
+}
+.goodLogo{
+	content:  "\2611";
+}
+.otherLogo{
+	content:  "?";
+}
+
+.serviceResult{
+	text-align: left;
+	padding-bottom: -2rem;
+}
+.serviceData{
+	margin-top: -1.8rem;
+	margin-right: 1rem;
+	float: right;
+}
+.serviceLogo{
+	margin-top: -1.8rem;
+	margin-right: 1rem;
+	font-size: 2rem;
+	float: center;
+  margin-left: 40%;
+}
+.serviceName{
+	margin-left: 1rem;
+}

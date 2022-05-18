@@ -1,0 +1,42 @@
+
+<div class= "bookingWrap" style="break-inside:avoid !important;">
+<div style="position:absolute;width:246px;height:68px;left:0px;top:0px;overflow:visible;" class="Booking openBooking" onclick = "resultClicked({{result_id}});">
+		<svg class="Booking_Background">
+		
+			<rect class = "Booking_Background_Fill "  rx="13" ry="13" x="0" y="0" width="246" height="68">
+			</rect>
+		</svg>
+		<div style="position:absolute;width:6px;height:56px;left:0px;top:6px;overflow:visible;{% if color == 'red' : %} fill: rgba(255,93,0,1); {% else : %}  fill: rgba(0,255,93,1);{% endif %}" class="Avalibility_Indicator">
+			<svg class="Rectangle_4">
+			<defs>
+			    <linearGradient id="linear-gradient-up" x1="0.574" y1="1.000" x2="0.569" y2="0.000" gradientUnits="objectBoundingBox">
+			      <stop offset="0" stop-color="#dcdcdc"/>
+			      <stop offset="0.154" stop-color="#f5f5f5"/>
+			      <stop offset="1" stop-color="#fff"/>
+			    </linearGradient>
+			    <linearGradient id="linear-gradient-down" x1="0.574" y1="1.000" x2="0.569" y2="0.000" gradientUnits="objectBoundingBox">
+			      <stop offset="0" stop-color="#fff"/>
+			      <stop offset="0.856" stop-color="#f5f5f5"/>
+			      <stop offset="1" stop-color="#dcdcdc"/>
+			    </linearGradient>
+			  </defs>
+				<rect rx="5" ry="5" x="0" y="0" width="6" height="56">
+				</rect>
+			</svg>
+		</div>
+		<svg class="Booking_Outline">
+			<rect rx="13" ry="13" x="0" y="0" width="246" height="68">
+			</rect>
+		</svg>
+		<div class = "Booking_Name" >
+			<span>{{result_name}} </span>
+		</div>
+		<div class = "Pax_Count" >
+			<span>{{hosts_cleared}}/{{hostsTotal}} Safe</span>
+		</div>
+		<div class = "Time" >
+			<span>{{file_type}}</span>
+		</div>
+		
+	</div>
+	</div>
