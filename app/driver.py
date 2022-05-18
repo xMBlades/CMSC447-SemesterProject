@@ -7,6 +7,7 @@ import requests
 import json
 import re
 import math
+import paramiko
 import hashlib
 # from flask_cors import CORS, cross_origin
 
@@ -67,7 +68,7 @@ def insertNew(hash):
             try:
                 attributes = responsejson['data']['attributes']
             except KeyError:
-                return render_template("nullHash.html")
+                return 'error: 404'
     
     last_analysis_results = md5 = sha1 = sha256 = creation_date = size = type_description = signature_info = names = signers = counter_signers = hashcopyright = last_submission_date  = last_analysis_stats = ""
     if 'md5' in attributes: md5 = attributes['md5'] 
@@ -130,7 +131,7 @@ def insertNewHeadless(hash):
             try:
                 attributes = responsejson['data']['attributes']
             except KeyError:
-                return render_template("nullHash.html")
+                return 'error: 404'
     
     last_analysis_results = md5 = sha1 = sha256 = creation_date = size = type_description = signature_info = names = signers = counter_signers = hashcopyright = last_submission_date  = last_analysis_stats = ""
     if 'md5' in attributes: md5 = attributes['md5'] 
@@ -492,3 +493,79 @@ def sourcesSafe (jsn):
     threat_calc *= 100
     threat_calc = min( math.floor(threat_calc), 100)
     return [neither + harmless, total]
+
+
+
+
+@driver_api.route('/scanLink/', methods = ["GET"])
+def scanLink():
+    hash = hashLink(request.args.get('hash'))
+    today = date.today()
+    if(md5re.match(hash)):
+        print('recieved md5 hash...')
+
+        if(len(list(db['hashes'].find({'md5':hash}))) > 0):
+            print('hash exists in database!')
+            hashinfo = db['hashes'].find_one({'md5':hash})
+            hashjson = json.dumps(hashinfo,default=json_util.default)
+            upload_date = date.fromisoformat(hashinfo['db_insertion_date'])
+            delta = today - upload_date
+            print(delta, " since last update...")
+            if delta.days > 30:
+                updateOne(hashjson['md5'])
+            return dressupJSON(hashinfo)
+            
+    elif(sha1re.match(hash)):
+        print('recieved sha1 hash...')
+        if(len(list(db['hashes'].find({'sha1':hash}))) > 0):
+            print('hash exists in database!')
+            hashinfo = db['hashes'].find_one({'sha1':hash})
+            hashjson = json.dumps(hashinfo,default=json_util.default)
+            upload_date = date.fromisoformat(hashinfo['db_insertion_date'])
+            print(delta, " since last update...")
+            if delta.days > 30:
+                updateOne(hashjson['md5'])
+            return dressupJSON(hashinfo)
+            
+    elif(sha256re.match(hash)):
+        print('recieved sha256 hash...')
+        if(len(list(db['hashes'].find({'sha256':hash}))) > 0):
+            print('hash exists in database!')
+            hashinfo = db['hashes'].find_one({'sha256':hash})
+            hashjson = json.dumps(hashinfo,default=json_util.default)
+            upload_date = date.fromisoformat(hashinfo['db_insertion_date'])
+            delta = today - upload_date
+            print(delta, " since last update...")
+            if delta.days > 30:
+                updateOne(hashjson['md5'])
+            return dressupJSON(hashinfo)
+            
+    return insertNew(hash)
+
+
+
+def hashLink (linkText):
+    router_ip = "159.203.65.148"
+    router_username = "root"
+    router_password = "WZ*pJCpRVk%P1WRlZR1O"
+
+    ssh = paramiko.SSHClient()
+
+    # Load SSH host keys.
+    ssh.load_system_host_keys()
+    # Add SSH host key automatically if needed.
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    # Connect to router using username/password authentication.
+    ssh.connect(router_ip,  username=router_username,  password=router_password, look_for_keys=False )
+
+    # Run command.
+    ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("cd cell && wget " + linkText)
+
+    output = ssh_stdout.readlines()
+    print(output)
+    # Run command.
+    ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("python3 sandbox.py")
+    tmp = ssh_stdout.readlines()[0]
+    print(tmp)
+
+    return tmp

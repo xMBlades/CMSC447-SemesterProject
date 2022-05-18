@@ -64,6 +64,13 @@ def enterHash():
     returnHome = "/home"   
     return render_template("enterHash.html", return_home = returnHome, hash_search = hashSearch)
 
+@app.route("/enterLink")
+def enterLink():
+    
+    hashSearch = "/driver/scanLink"
+    returnHome = "/home"   
+    return render_template("enterLink.html", return_home = returnHome, hash_search = hashSearch)
+
 @app.route("/more")
 def more():
 
@@ -76,7 +83,7 @@ def home():
 
     linkA = "/selectFile"
     linkB = "/enterHash"
-    linkC = "/users/login"
+    linkC = "/enterLink"
     linkD = "/selectFolder"
     linkE = "/scanResults"
     linkF = "/users/register"
