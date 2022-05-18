@@ -536,8 +536,6 @@ def scanLink():
             upload_date = date.fromisoformat(hashinfo['db_insertion_date'])
             delta = today - upload_date
             print(delta, " since last update...")
-            if delta.days > 30:
-                updateOne(hashinfo['md5'])
             return dressupJSON(hashinfo)
             
     return insertNew(hash)
