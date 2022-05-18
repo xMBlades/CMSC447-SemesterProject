@@ -85,7 +85,7 @@ def home():
 
     try:
         tmp = SESSION[request.cookies.get('userID')][:]
-        print("here!")
+        # print("here!")
         fname = tmp[2]
         lname =  tmp[3]
         user_page = ""
@@ -102,14 +102,14 @@ def scanResults():
     results = -1
     try:
         tmp = request.cookies.get('userID')
-        print(tmp)
+        # print(tmp)
         tmp = SESSION[request.cookies.get('userID')]
-        print(tmp)
+        # print(tmp)
         tmp = str(SESSION[request.cookies.get('userID')][0])
         print(tmp)
         print(RESULTS)
         results = RESULTS[str(SESSION[request.cookies.get('userID')][0])]
-        print(results)
+        # print(results)
     except:
         return "No Results"
     counter = 0
@@ -138,7 +138,7 @@ def dequeue():
     try:
         tmp = QUEUE.pop(0)
     except:
-        print("empty queue")
+        # print("empty queue")
         return "Empty"
 
     scanRslt = massHash(tmp["hash"])
@@ -148,7 +148,7 @@ def dequeue():
     except KeyError:
         RESULTS.update({tmp["user"] : [[tmp['name'], tmp['hash'], scanRslt[0], scanRslt[1]]]})
     pass
-    print("REMOVED  ", tmp["name"], " from queue for user", tmp["user"])
+    # print("REMOVED  ", tmp["name"], " from queue for user", tmp["user"])
     # QUEUE.append(tmp)
     return "Okay!"
 

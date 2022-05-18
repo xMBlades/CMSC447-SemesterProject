@@ -111,10 +111,23 @@ def registerUsr():
 		val = (username, fname, lname, email, storablePW, usrImgUrl, salt, emptyField)
 		mycursor.execute(sql, val)
 
+		sql = "SELECT * FROM users WHERE username LIKE '" + username + "'"
+		# val = (username, fname, lname, email, storablePW, usrImgUrl, salt, emptyField)
+		mycursor.execute(sql)
+
 		mydb.commit()
 
+		# print(sql)
+		myresult = mycursor.fetchall()
 
-		return  "record #" + str(mycursor.rowcount) + " inserted."
+		mydb.commit()
+		resp = make_response(redirect("../../"))
+		token = secrets.token_urlsafe(32)
+		resp.set_cookie('userID', token)
+		resp.set_cookie('userID', token)
+		SESSION.update({token: [myresult[0][0], username, myresult[0][2], myresult[0][3], myresult[0][6]]})
+
+		return  resp
         
 	else:
 		return render_template("registrationPage.html")
