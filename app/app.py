@@ -54,7 +54,7 @@ def selectFolder():
     try:
         uid = SESSION[request.cookies.get('userID')][0]
     except:
-        return "This feature is only for logged in users"
+        return render_template("loginPlease.html", return_home = returnHome)
     return render_template("selectFolder.html", return_home = returnHome, hash_search = hashSearch, userID = uid)
 
 @app.route("/enterHash")

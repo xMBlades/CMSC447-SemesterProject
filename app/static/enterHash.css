@@ -6,7 +6,43 @@
 .approveBtn {
   display: inline-block;
   transition: none;
-  border-radius: 0px;
+  border-radius: 8px;
+  border: 0;
+  margin: auto;
+  padding: 0;
+  background: #4444cc80;
+  width: 10vw;
+  max-width: 25%;
+  max-height:100%;
+  text-align: center;
+  line-height: 6vh;
+  color: #fff;
+  cursor: pointer;
+  text-decoration:none;
+}
+div .approveBtn {
+  display: inline-block;
+  transition: none;
+  border-radius: 8px;
+  border: 0;
+  margin: auto;
+  padding: 0;
+  background: #4444cc80;
+  width: 10vw;
+  max-width: 25%;
+  max-height:100%;
+  text-align: center;
+  line-height: 6vh;
+  color: #fff;
+  cursor: pointer;
+}
+a .approveBtn {
+  display: inline-block;
+  transition: none;
+  border-radius: 8px;
+  font-family: Arial;
+  text-decoration:none;
+  font-size: 18px
   border: 0;
   margin: auto;
   padding: 0;
@@ -41,7 +77,7 @@
 }
 .disapproveBtn {
   display: inline-block;
-  border-radius: 0px;
+  border-radius: 8px;
   font-size: 18px;
   font-family: Arial;
   margin: auto;
