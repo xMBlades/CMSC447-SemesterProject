@@ -67,7 +67,7 @@ def insertNew(hash):
             try:
                 attributes = responsejson['data']['attributes']
             except KeyError:
-                return render_template("nullHash.html")
+                return render_template("nullHash.html", return_home = "/home")
     
     last_analysis_results = md5 = sha1 = sha256 = creation_date = size = type_description = signature_info = names = signers = counter_signers = hashcopyright = last_submission_date  = last_analysis_stats = ""
     if 'md5' in attributes: md5 = attributes['md5'] 
@@ -130,7 +130,7 @@ def insertNewHeadless(hash):
             try:
                 attributes = responsejson['data']['attributes']
             except KeyError:
-                return render_template("nullHash.html")
+                return render_template("nullHash.html", return_home = "/home")
     
     last_analysis_results = md5 = sha1 = sha256 = creation_date = size = type_description = signature_info = names = signers = counter_signers = hashcopyright = last_submission_date  = last_analysis_stats = ""
     if 'md5' in attributes: md5 = attributes['md5'] 
@@ -181,7 +181,7 @@ def updateOne(hashmd5):
     try:
         attributes = responsejson['data']['attributes']
     except KeyError:
-        return 'error: 404'
+        return render_template("nullHash.html", return_home = "/home")
     last_analysis_results = md5 = sha1 = sha256 = creation_date = size = type_description = signature_info = names = signers = counter_signers = hashcopyright = last_submission_date  = last_analysis_stats = ""
     if 'md5' in attributes: md5 = attributes['md5'] 
     if 'sha1' in attributes: sha1 = attributes['sha1']
