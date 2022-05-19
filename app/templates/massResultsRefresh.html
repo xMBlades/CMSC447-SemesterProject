@@ -1,0 +1,11 @@
+<h1>Scan Results:</h1>
+<br>
+{% if remaining_files == -1 : %}
+<h2 style = "color: darkred" >Please log in to use this feature</h2>
+{% elif remaining_files > 0 : %}
+<h2 >You have {{remaining_files}} files remaining</h2>
+{% endif %}
+<hr><br>
+    <div id = "indvidualResults">
+        {{results|safe}}
+    </div>

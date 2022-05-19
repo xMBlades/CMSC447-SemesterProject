@@ -111,7 +111,7 @@ def home():
 def scanResults():
     results = -1
     remainingFilesInQueue = 0
-    errorMsgFlag = False
+    errorMsgFlag = -1
     userNum = ""
     try:
         tmp = request.cookies.get('userID')
@@ -121,7 +121,7 @@ def scanResults():
         tmp = str(SESSION[request.cookies.get('userID')][0])
         print(tmp)
         print(RESULTS)
-        errorMsgFlag = -1
+        errorMsgFlag = 0
         userNum = tmp[:]
         results = RESULTS[str(SESSION[request.cookies.get('userID')][0])]
         # print(results)
@@ -157,6 +157,60 @@ def scanResults():
         counter += 1
         resultList = resultList + render_template("resultBox.html.j2", result_name =  rslt_name, result_id = rslt_id, hosts_cleared = hosts_cleared, hostsTotal = hostsTotal, file_type = file_type, color = "green")
     return render_template("massResults.html", results = resultList, remaining_files = remainingFilesInQueue)
+
+
+@app.route("/scanResultsR", methods = ["GET"])
+def scanResultsRefreshable():
+    results = -1
+    remainingFilesInQueue = 0
+    errorMsgFlag = -1
+    userNum = ""
+    try:
+        tmp = request.cookies.get('userID')
+        # print(tmp)
+        tmp = SESSION[request.cookies.get('userID')]
+        # print(tmp)
+        tmp = str(SESSION[request.cookies.get('userID')][0])
+        print(tmp)
+        print(RESULTS)
+        errorMsgFlag = 0
+        userNum = tmp[:]
+        results = RESULTS[str(SESSION[request.cookies.get('userID')][0])]
+        # print(results)
+    except:
+        return render_template("massResultsRefresh.html", results = "", remaining_files = errorMsgFlag)
+    counter = 0
+    resultList = ""
+    for q in QUEUE:
+        if str(q["user"]) == userNum:
+            remainingFilesInQueue += 1
+    pass
+
+    for r in results:
+
+        rslt_id = r[1]
+        rslt_name = r[0]
+        hosts_cleared = r[2]
+        hostsTotal = r[3]
+        file_type = "KNOWN"
+        color = "green"
+        try:
+            if (int(r[3]) == 0):
+                hosts_cleared = "0"
+                hostsTotal = "0"
+                file_type = "UNIQUE"
+            elif (int(r[2])/int(r[3]) <= 0.8):
+                color = "red"
+        except ValueError:
+            hosts_cleared = "0"
+            hostsTotal = "0"
+            file_type = "UNIQUE"
+
+        counter += 1
+        resultList = resultList + render_template("resultBox.html.j2", result_name =  rslt_name, result_id = rslt_id, hosts_cleared = hosts_cleared, hostsTotal = hostsTotal, file_type = file_type, color = "green")
+    return render_template("massResultsRefresh.html", results = resultList, remaining_files = remainingFilesInQueue)
+
+
 
 
 @app.route("/enqueue", methods = ["POST"])
