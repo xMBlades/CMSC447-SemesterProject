@@ -79,11 +79,13 @@
 	border-radius: 3%;
 	z-index: 3;
 	text-align: center;
+  color: black;
 }
 .buttonHolder {
 	margin: auto;
 	width: 100%;
 	margin-top: 2vh;
+  /*color: black;*/
 }
 .fhack {
 	width: 0px;

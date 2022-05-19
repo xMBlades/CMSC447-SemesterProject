@@ -30,12 +30,14 @@ headers2 = {
     "Accept": "application/json",
     "x-apikey": "382b7996b9f689b0abd1848ceefe9a31e97afdd5bd575e9766ca9d5c68322ce3"
 }
-
 headers3 = {
     "Accept": "application/json",
     "x-apikey": "40582ad863ff601e38885a20c9220954d0b41c0bb6cb99fc8e658e66893970a4"
 }
-
+headers4 = {
+    "Accept": "application/json",
+    "x-apikey": "5a9608cdbe32a2b454a3e03bcb8edb93a9a45db2b5ab8280eee96f34c4446c7e"
+}
 
 def hashFile():
         f = request.files['file']
@@ -68,7 +70,13 @@ def insertNew(hash):
             try:
                 attributes = responsejson['data']['attributes']
             except KeyError:
-                return 'error: 404'
+                response = requests.request("GET", url+hash, headers=headers4)
+                print(response.text)
+                responsejson = json.loads(response.text)
+                try:
+                    attributes = responsejson['data']['attributes']
+                except KeyError:
+                    return render_template("nullHash.html", return_home = "/home")
     
     last_analysis_results = md5 = sha1 = sha256 = creation_date = size = type_description = signature_info = names = signers = counter_signers = hashcopyright = last_submission_date  = last_analysis_stats = ""
     if 'md5' in attributes: md5 = attributes['md5'] 
@@ -131,7 +139,7 @@ def insertNewHeadless(hash):
             try:
                 attributes = responsejson['data']['attributes']
             except KeyError:
-                return 'error: 404'
+                return responsejson
     
     last_analysis_results = md5 = sha1 = sha256 = creation_date = size = type_description = signature_info = names = signers = counter_signers = hashcopyright = last_submission_date  = last_analysis_stats = ""
     if 'md5' in attributes: md5 = attributes['md5'] 
@@ -182,7 +190,7 @@ def updateOne(hashmd5):
     try:
         attributes = responsejson['data']['attributes']
     except KeyError:
-        return 'error: 404'
+        return render_template("nullHash.html", return_home = "/home")
     last_analysis_results = md5 = sha1 = sha256 = creation_date = size = type_description = signature_info = names = signers = counter_signers = hashcopyright = last_submission_date  = last_analysis_stats = ""
     if 'md5' in attributes: md5 = attributes['md5'] 
     if 'sha1' in attributes: sha1 = attributes['sha1']

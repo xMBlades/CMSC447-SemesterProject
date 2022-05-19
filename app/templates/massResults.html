@@ -43,7 +43,13 @@
 {% endblock %}
 {% block popout%} 
 <h1>Scan Results:</h1>
-<br><hr><br>
+<br>
+{% if remaining_files == False : %}
+<h2 style = "color: darkred" >Please log in to use this feature</h2>
+{% elif remaining_files > 0 : %}
+<h2 >You have {{remaining_files}} files remaining</h2>
+{% endif %}
+<hr><br>
 	<div id = "indvidualResults">
 		{{results|safe}}
 	</div>

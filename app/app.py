@@ -110,6 +110,9 @@ def home():
 @app.route("/scanResults", methods = ["GET"])
 def scanResults():
     results = -1
+    remainingFilesInQueue = 0
+    errorMsgFlag = False
+    userNum = ""
     try:
         tmp = request.cookies.get('userID')
         # print(tmp)
@@ -118,12 +121,18 @@ def scanResults():
         tmp = str(SESSION[request.cookies.get('userID')][0])
         print(tmp)
         print(RESULTS)
+        errorMsgFlag = -1
+        userNum = tmp[:]
         results = RESULTS[str(SESSION[request.cookies.get('userID')][0])]
         # print(results)
     except:
-        return "No Results"
+        return render_template("massResults.html", results = "", remaining_files = errorMsgFlag)
     counter = 0
     resultList = ""
+    for q in QUEUE:
+        if str(q["user"]) == userNum:
+            remainingFilesInQueue += 1
+    pass
 
     for r in results:
 
@@ -134,7 +143,11 @@ def scanResults():
         file_type = "KNOWN"
         color = "green"
         try:
-            if (int(r[2])/int(r[3]) <= 0.8):
+            if (int(r[3]) == 0):
+                hosts_cleared = "0"
+                hostsTotal = "0"
+                file_type = "UNIQUE"
+            elif (int(r[2])/int(r[3]) <= 0.8):
                 color = "red"
         except ValueError:
             hosts_cleared = "0"
@@ -143,7 +156,7 @@ def scanResults():
 
         counter += 1
         resultList = resultList + render_template("resultBox.html.j2", result_name =  rslt_name, result_id = rslt_id, hosts_cleared = hosts_cleared, hostsTotal = hostsTotal, file_type = file_type, color = "green")
-    return render_template("massResults.html", results = resultList)
+    return render_template("massResults.html", results = resultList, remaining_files = remainingFilesInQueue)
 
 
 @app.route("/enqueue", methods = ["POST"])
@@ -166,7 +179,10 @@ def dequeue():
         RESULTS[tmp["user"]].append([tmp['name'], tmp['hash'], scanRslt[0], scanRslt[1]])
 
     except KeyError:
-        RESULTS.update({tmp["user"] : [[tmp['name'], tmp['hash'], scanRslt[0], scanRslt[1]]]})
+        try:
+            RESULTS[tmp["user"]].append([tmp['name'], tmp['hash'], 0, 0])
+        except :
+            RESULTS.update({tmp["user"] : [[tmp['name'], tmp['hash'], 0, 0]]})
     pass
     # print("REMOVED  ", tmp["name"], " from queue for user", tmp["user"])
     # QUEUE.append(tmp)
@@ -174,5 +190,5 @@ def dequeue():
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=dequeue, trigger="interval", seconds=30)
+scheduler.add_job(func=dequeue, trigger="interval", seconds=10)
 scheduler.start()

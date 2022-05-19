@@ -115,6 +115,7 @@
 		font-weight: normal;
 		font-size: 19px;
 		color: rgba(57,83,117,1);
+		word-break: break-all;
 	}
 	.Pax_Count {
 		left: 9px;
