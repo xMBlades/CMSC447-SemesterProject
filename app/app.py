@@ -69,7 +69,8 @@ def enterLink():
     
     hashSearch = "/driver/scanLink"
     returnHome = "/home"   
-    return render_template("enterLink.html", return_home = returnHome, hash_search = hashSearch)
+    # return render_template("enterLink.html", return_home = returnHome, hash_search = hashSearch)
+    return render_template("underConstruction.html", return_home = returnHome)
 
 @app.route("/more")
 def more():
