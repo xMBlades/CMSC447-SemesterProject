@@ -99,6 +99,7 @@ function traverseFileTree(item, path) {
 
 
 holder.ondrop = function (event) {
+  $("#loader").show();
     var items = event.dataTransfer.items;
   for (var i=0; i<items.length; i++) {
     // webkitGetAsEntry is where the magic happens
@@ -235,18 +236,23 @@ function queueFile (file, name){
       }
 }
 
+let waitTimer = 0;
 
 window.setInterval(function () {
       console.log("checking " + filesIn + ",    " + filesSent);
       // console.log("checking");
       if (filesIn < filesSent){
-        $("#loader").show();
+        
 
       }
       else{
        $("#loader").hide(); 
        if (filesIn >= 1){
-          window.location.replace("/home");   
+          if (waitTimer > 20){
+            
+            window.location.replace("/home");   
+          }
+          waitTimer += 1;
        }
       }
 }, 500);
